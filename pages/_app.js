@@ -1,10 +1,12 @@
 import "../styles/globals.css";
-import { useEagerConnect, useInactiveListener } from "../utils/hooks";
+import { useEagerConnect, useInactiveListener } from "../utils/hooks.ts";
 import {
   Web3ReactProvider,
   useWeb3React,
   UnsupportedChainIdError,
 } from "@web3-react/core";
+
+import React from "react";
 
 function MyApp({ Component, pageProps }) {
   const context = useWeb3React();

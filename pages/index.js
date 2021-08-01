@@ -10,22 +10,13 @@ import { Header, Prompt, Card, Form, Block, Footer } from "../patterns";
 //import data
 
 import { seo, settings } from "../data";
-import { useWeb3React } from "@web3-react/core";
 
 export default function Home() {
   const [splashIsOn, setSplashIsOn] = useState(false);
   const [switchReferrerIsOn, setSwitchReferrerIsOn] = useState(false);
   const [connectWalletIsOn, setConnectWalletIsOn] = useState(false);
 
-  const { active, account } = useWeb3React();
-
   useEffect(() => {
-    if (active) {
-      console.log(account);
-    } else {
-      console.log("connect wallet");
-    }
-
     setSplashIsOn(true);
     setTimeout(() => {
       setSplashIsOn(false);
@@ -37,7 +28,6 @@ export default function Home() {
   const connectWalletHandler = (e) => {
     e.preventDefault(e);
     console.log("connecting...");
-
     setConnectWalletIsOn(true);
   };
 
@@ -70,19 +60,88 @@ export default function Home() {
     </Head>
   );
 
-  const renderMyEarningsBlock = (
+  const renderAutoDividendEarningsBlock = (
     <block>
-      <blockheader>
-        <h4>Earnings in BNB | 250 BNB</h4>
-        <button className="button-mini">switch coin</button>
-      </blockheader>
+      <icon>
+        <Image
+          src="/assets/icons/icon-balance.svg"
+          alt="illustration"
+          width="24px"
+          height="24px"
+        />
+      </icon>
+      <blockcontent>
+        <label>Auto-dividend earnings</label>
+        <p>0</p>
+      </blockcontent>
+    </block>
+  );
+
+  const renderInviteBanner = (
+    <banner className="mini-banner">
+      <>
+        <h3>Invite & Earn referral income with</h3>
+        <h2>AUTO DIVIDENDS</h2>
+        <button>Get invite link</button>
+      </>
+    </banner>
+  );
+
+  const renderFeatureBanner = (
+    <banner>
+      <Image
+        src="/assets/images/doge-dog.png"
+        alt="illustration"
+        width="68px"
+        height="85px"
+      />
+
+      <div style={{ display: "grid", flexDirection: "row", lineHeight: "0px" }}>
+        <h3>Switch earnings</h3>
+        <h2>DOGE COIN.</h2>
+      </div>
+      <p>Feature releasing next in a while.</p>
+    </banner>
+  );
+
+  const renderReferralEarningBlock = (
+    <block>
+      <icon>
+        <Image
+          src="/assets/icons/icon-balance.svg"
+          alt="illustration"
+          width="24px"
+          height="24px"
+        />
+      </icon>
+      <blockcontent>
+        <label>Referral earnings</label>
+        <p>0</p>
+      </blockcontent>
+    </block>
+  );
+
+  const totalEarnings = 90;
+  const renderMyEarningsBlock = (
+    <block className="row">
+      <block>
+        <h2>{totalEarnings}</h2>
+        <h4>BNB Earned till now</h4>
+      </block>
+
+      {renderAutoDividendEarningsBlock}
+      {renderReferralEarningBlock}
+      <button className="button-mini">switch coin</button>
     </block>
   );
 
   const buyCoinFormContent = (
     <>
-      <input placeholder="enter BNB amount" />
-      <button>Buy now</button>
+      <input type="number" placeholder="enter BNB amount" />
+      <label>You will get</label>
+      <h3>{"0"} DOGEX</h3>
+      <label>for 50 BNB</label>
+      <button>Buy</button>
     </>
   );
 
@@ -91,11 +150,25 @@ export default function Home() {
       <Card variant="referrals-card" />
       <column>
         {renderMyEarningsBlock}
-        <Form
-          title={"Buy DogeX"}
-          label={"1 DogeX = 0.09 BNB"}
-          content={buyCoinFormContent}
-        />
+        <block className="row">
+          <h3>Stake DogeX and start earning BNB / DOGE</h3>
+          <info>
+            <span>
+              <icon>
+                <Image
+                  alt="info"
+                  src="/assets/icons/icon-asterisk.svg"
+                  height="10px"
+                  width="10px"
+                />
+              </icon>
+            </span>
+            You will be redirected to UNISWAP for buying DogeX
+          </info>
+        </block>
+        <Form label={"1 DogeX = 0.09 BNB"} content={buyCoinFormContent} />
+        {renderInviteBanner}
+        {renderFeatureBanner}
       </column>
       <Card variant="leaderboard-card" />
     </contentmain>
@@ -137,7 +210,14 @@ export default function Home() {
 
   const connectWalletPromptContent = (
     <>
-      <icon>Metamask Wallet</icon>
+      <icon>
+        <Image
+          src="/assets/logos/logo-metamask.png"
+          alt="logo-metamask"
+          width="146px"
+          height="70px"
+        />
+      </icon>
       <button>Connect wallet</button>
     </>
   );
@@ -158,7 +238,7 @@ export default function Home() {
           />
         </icon>
         <blockinputcontent>
-          <label>DOGEX Balance</label>
+          <label>My address</label>
           <p>x98abhv..87</p>
         </blockinputcontent>
         <icon>
@@ -205,22 +285,6 @@ export default function Home() {
         />
       </content>
 
-      <banner>
-        <Image
-          src="/assets/images/doge-dog.png"
-          alt="illustration"
-          width="68px"
-          height="85px"
-        />
-
-        <div
-          style={{ display: "grid", flexDirection: "row", lineHeight: "0px" }}
-        >
-          <h3>Switch earnings</h3>
-          <h2>DOGE COIN.</h2>
-        </div>
-        <p>Feature releasing next in a while.</p>
-      </banner>
       <Footer />
     </div>
   );
