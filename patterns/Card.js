@@ -3,9 +3,22 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { render } from 'react-dom'
 
-const Card = ({ variant, logo, title, content, isLoggedIn }) => {
+const Card = ({ variant, logo, title, content, isLoggedIn,  }) => {
 
 
+
+    const renderRefferals = <blockinput>
+          <icon>
+      <Image src='/assets/icons/icon-address.svg' alt='illustration' width='10px' height='10px' />
+  </icon>
+        <blockinputcontent>
+          <label>address</label>
+                  <p>x98abhv..87</p>
+        </blockinputcontent>
+          <icon>
+      <Image src='/assets/icons/icon-address.svg' alt='illustration' width='10px' height='10px' />
+  </icon>
+      </blockinput>
     
     const renderDefaultCard =
         <p>card</p>
@@ -15,7 +28,14 @@ const Card = ({ variant, logo, title, content, isLoggedIn }) => {
         <cardheader>
           <h4>My Referrals</h4>
           <count>09</count>  
-        </cardheader>
+                </cardheader>
+                <cardcontent>
+                    {renderRefferals}
+                    {renderRefferals}
+                                        {renderRefferals}
+                    {renderRefferals}
+                    {renderRefferals}
+                </cardcontent>
         </card>
     
 
@@ -25,8 +45,8 @@ const Card = ({ variant, logo, title, content, isLoggedIn }) => {
         const renderLeaderboardCard =
 <card>
         <cardheader>
-          <h4>Leaderboard Top 10 wallets</h4>
-          <tag>This week</tag>  
+          <h4>Leaderboard</h4>
+          <tag>Weekly</tag>  
         </cardheader>
       </card>
     return (

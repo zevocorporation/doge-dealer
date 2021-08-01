@@ -21,11 +21,16 @@ a {
 * {
   box-sizing: border-box;
   font-family: Barlow;
-  border-radius: 2px;
+  border-radius: 5px;
 }
 
 p {
   color: whitesmoke;
+  font-size: 12px;
+}
+
+h2 {
+  color: #FF8A00;
 }
 
 h3,h4 {
@@ -34,8 +39,11 @@ h3,h4 {
   margin: 22px 0px;
 }
 
+
 h4 {
   font-weight: lighter;
+    font-size: 14px;
+
 }
 
 label {
@@ -48,15 +56,26 @@ background-color: #323232;
 color: whitesmoke;
 font-size: 10px;
 padding: 6px 16px;
-align-items: center;
 text-align: center;
 cursor: pointer;
-
 }
 
 hr {
   border-top: 3px solid #bbb;
 }
+
+info {
+  font-size: 10px;
+  color: whitesmoke;
+  display: flex;
+align-items: center;
+  gap: 3px;
+  justify-content: space-between;
+}
+
+
+
+
 
 
 /* button stylings */
@@ -131,15 +150,17 @@ background-color: #262626;
 /* container styling */
 
 content {
-    margin-top: 38vh;
-}
+    margin-top: 20vh;
+  }
 
 contentmain {
   display: grid;
   grid-auto-flow: row;
   grid-auto-flow: column;
   width: 96vw;
-  grid-gap: 32px;
+  grid-gap: 16px;
+  padding: 16px;
+  justify-content: center;
 }
 
 /* card styling */
@@ -147,14 +168,21 @@ contentmain {
 card {
   background-color: #262626;
   height: 400px;
-  border-radius: 2px;
-  padding: 12px 32px;
+  border-radius: 5px;
+  padding: 0px 16px;
 }
 
 cardheader {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px
+}
+
+cardcontent {
+  display: flex;
+  flex-direction: column ;
+  gap: 16px;
 }
 
 count {
@@ -164,8 +192,9 @@ count {
 
 block {
   display: flex;
-  justify-content: center;
-    gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
 }
 
 blockcontent {
@@ -193,6 +222,30 @@ blockinput {
 }
 
 
+form {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  background-color: #262626;
+  border-radius: 5px;
+  padding: 16px;
+}
+
+formcontent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 0px;
+}
+
+formheader {
+  display: flex;
+  gap: 32px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
 
 banner {
   display: flex;
@@ -203,6 +256,30 @@ banner {
   align-items: center;
   justify-content: space-between;
   width: 800px;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.mini-banner {
+  height: 70px;
+  border-radius: 0px;
+  background-color: white;
+  color: black
+}
+
+.mini-banner > h3 {
+  color: black;
+}
+
+.mini-banner > button {
+  background-color: rgb(23, 156, 23);
+}
+
+.mini-banner > button:hover {
+  background-color: rgb(30, 192, 30);
+}
+
+.mini-banner > button:active {
+  background-color: rgb(24, 177, 24);
 }
 
 footer {
@@ -242,6 +319,7 @@ promptcontent {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px
 }
 
 icon {
@@ -274,4 +352,12 @@ logo {
 column {
   display: flex;
   flex-direction: column;
+}
+
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
 }

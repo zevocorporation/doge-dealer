@@ -63,28 +63,101 @@ export default function Home() {
         <link rel="icon" href={seo.favicon_public_path} />
     </Head>
   
+
+   const renderAutoDividendEarningsBlock = <block>
+    <icon>
+      <Image src='/assets/icons/icon-balance.svg' alt='illustration' width='24px' height='24px' />
+  </icon>
+          <blockcontent>
+          <label>
+            Auto-dividend earnings
+          </label>
+      <p>0</p>
+    </blockcontent>
+   </block>
+  
+  const renderInviteBanner =
+  <banner className='mini-banner'>
+      <>
+           <h3>
+          Invite & Earn referral income with 
+        </h3>
+      <h2>
+        AUTO DIVIDENDS
+        </h2>
+        <button>
+          Get invite link
+        </button>
+      </>
+  </banner>
+  
+    const renderFeatureBanner =               <banner>
+                <Image src='/assets/images/doge-dog.png' alt='illustration' width='68px' height='85px' />
+
+        <div style={{ display: 'grid', flexDirection: 'row', lineHeight: '0px'}}>
+           <h3>
+          Switch earnings
+        </h3>
+          <h2>
+          DOGE COIN.
+        </h2>
+        </div>
+        <p>Feature releasing next in a while.</p>
+      </banner>
+  
+  
+  const renderReferralEarningBlock =
+  <block>
+    <icon>
+      <Image src='/assets/icons/icon-balance.svg' alt='illustration' width='24px' height='24px' />
+  </icon>
+          <blockcontent>
+          <label>
+            Referral earnings
+          </label>
+      <p>0</p>
+    </blockcontent>
+  </block>
+  
+  const totalEarnings = 90
     const renderMyEarningsBlock =
-      <block>
-      <blockheader>
-        <h4>Earnings in BNB     |  250 BNB</h4>
-        <button className='button-mini'>
+      <block className='row'>
+        <block>
+           <h2>{totalEarnings}</h2>
+            <h4>BNB Earned till now</h4>
+          </block>
+  
+          {renderAutoDividendEarningsBlock}
+        {renderReferralEarningBlock}
+              <button className='button-mini'>
           switch coin
         </button>
-      </blockheader>
       </block>
   
 
   const buyCoinFormContent =
     <>
-      <input placeholder='enter BNB amount' />
-    <button>Buy now</button>
+      <input type='number' placeholder='enter BNB amount' />
+      <label>You will get</label>
+      <h3>{'0'} DOGEX</h3>
+            <label>for 50 BNB</label>
+            <button>Buy</button>
     </>
 
   const renderMain =
     <contentmain >
       <Card variant='referrals-card' />
       <column>{renderMyEarningsBlock}
-        <Form title={'Buy DogeX'} label={'1 DogeX = 0.09 BNB'} content={buyCoinFormContent} />
+        <block className='row'>
+          <h3>Stake DogeX and start earning BNB / DOGE</h3>
+          <info><span>
+            <icon>
+              <Image alt='info' src='/assets/icons/icon-asterisk.svg' height='10px' width='10px'/>
+          </icon></span>You will be redirected to UNISWAP for buying DogeX</info>
+        </block>
+        <Form label={'1 DogeX = 0.09 BNB'} content={buyCoinFormContent} />
+                {renderInviteBanner}
+        {renderFeatureBanner}
       </column>
       <Card variant='leaderboard-card'/>
     </contentmain>
@@ -115,6 +188,9 @@ export default function Home() {
     </blockcontent>
   </block>
 
+
+
+
   // rendering contents
 
   const switchReferrerPromptContent =
@@ -125,7 +201,9 @@ export default function Home() {
   
     const connectWalletPromptContent =
   <>
-        <icon>Metamask Wallet</icon>
+        <icon>
+                <Image src='/assets/logos/logo-metamask.png' alt='logo-metamask' width='146px' height='70px' />
+        </icon>
     <button>Connect wallet</button>
   </>
   
@@ -139,7 +217,7 @@ export default function Home() {
       <Image src='/assets/icons/icon-address.svg' alt='illustration' width='24px' height='24px' />
   </icon>
         <blockinputcontent>
-          <label>DOGEX Balance</label>
+          <label>My address</label>
                   <p>x98abhv..87</p>
         </blockinputcontent>
           <icon>
@@ -169,19 +247,7 @@ export default function Home() {
             || connectWalletIsOn && connectWalletPromptContent} />
       </content>
 
-      <banner>
-                <Image src='/assets/images/doge-dog.png' alt='illustration' width='68px' height='85px' />
 
-        <div style={{ display: 'grid', flexDirection: 'row', lineHeight: '0px'}}>
-           <h3>
-          Switch earnings
-        </h3>
-          <h2>
-          DOGE COIN.
-        </h2>
-        </div>
-        <p>Feature releasing next in a while.</p>
-      </banner>
       <Footer/>
     </div>
   )

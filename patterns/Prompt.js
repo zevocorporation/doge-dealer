@@ -1,6 +1,10 @@
   
 
-import React,{useState} from 'react'
+import React, { useState } from 'react'
+
+import Image from 'next/image'
+
+
 const Prompt = ({ variant, title,content, isOpen, setIsOpen }) => {
 
     const closePromptHandler = (e) => {
@@ -13,7 +17,9 @@ const Prompt = ({ variant, title,content, isOpen, setIsOpen }) => {
          <prompt>
             <promptheader>
                 <h3>{title}</h3>
-               <icon onClick={(e)=> closePromptHandler(e)}>close</icon>
+                    <icon onClick={(e) => closePromptHandler(e)}>
+      <Image src='/assets/icons/icon-close.svg' alt='icon' width='24px' height='24px' />
+               </icon>
             </promptheader>
             <promptcontent>
                {content}
