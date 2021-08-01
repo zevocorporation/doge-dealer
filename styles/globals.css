@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@500&display=swap");
 
 html,
 body {
@@ -6,11 +6,10 @@ body {
   margin: 0;
   font-family: Barlow;
   background-color: #202020;
--webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
--moz-box-sizing: border-box;    /* Firefox, other Gecko */
-box-sizing: border-box;         /* Opera/IE 8+ */;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box; /* Opera/IE 8+ */
   overflow: hidden;
-
 }
 
 a {
@@ -30,20 +29,19 @@ p {
 }
 
 h2 {
-  color: #FF8A00;
+  color: #ff8a00;
 }
 
-h3,h4 {
+h3,
+h4 {
   color: whitesmoke;
   font-weight: 100;
   margin: 22px 0px;
 }
 
-
 h4 {
   font-weight: lighter;
-    font-size: 14px;
-
+  font-size: 14px;
 }
 
 label {
@@ -52,12 +50,12 @@ label {
 }
 
 tag {
-background-color: #323232;
-color: whitesmoke;
-font-size: 10px;
-padding: 6px 16px;
-text-align: center;
-cursor: pointer;
+  background-color: #323232;
+  color: whitesmoke;
+  font-size: 10px;
+  padding: 6px 16px;
+  text-align: center;
+  cursor: pointer;
 }
 
 hr {
@@ -68,20 +66,15 @@ info {
   font-size: 10px;
   color: whitesmoke;
   display: flex;
-align-items: center;
+  align-items: center;
   gap: 3px;
   justify-content: space-between;
 }
 
-
-
-
-
-
 /* button stylings */
 
 button {
-  background-color: #FF8A00;
+  background-color: #ff8a00;
   color: white;
   height: 38px;
   border: none;
@@ -91,37 +84,35 @@ button {
 }
 
 button:hover {
-background-color: #ff9c2b;
-box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  background-color: #ff9c2b;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
 }
-
 
 button:active {
-background-color: #d17000;
+  background-color: #d17000;
 }
 
-.button-mini{
-height: 18px;
-background-color: #323232;
-color: #FF8A00;
-font-size: 10px;
-padding: 0px 16px;
+.button-mini {
+  height: 18px;
+  background-color: #323232;
+  color: #ff8a00;
+  font-size: 10px;
+  padding: 0px 16px;
 }
 
 .button-mini:hover {
-background-color: #323232c7;
-box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  background-color: #323232c7;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-
 .button-mini:active {
-background-color: #222222;
+  background-color: #222222;
 }
 
 /* input stylings */
 
 input {
-  background-color: #2E2E2E;
+  background-color: #2e2e2e;
   color: white;
   height: 38px;
   border: none;
@@ -130,7 +121,7 @@ input {
 }
 
 input:focus {
- outline:black;
+  outline: black;
 }
 
 header {
@@ -141,7 +132,7 @@ header {
   gap: 32px;
   justify-content: space-between;
   align-items: center;
-background-color: #262626;
+  background-color: #262626;
   height: 15vh;
   width: 100%;
   padding: 0px 32px;
@@ -150,17 +141,18 @@ background-color: #262626;
 /* container styling */
 
 content {
-    margin-top: 20vh;
-  }
+  margin-top: 20vh;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+}
 
 contentmain {
-  display: grid;
-  grid-auto-flow: row;
+  display: flex;
   grid-auto-flow: column;
-  width: 96vw;
   grid-gap: 16px;
   padding: 16px;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 /* card styling */
@@ -176,12 +168,12 @@ cardheader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px
+  gap: 16px;
 }
 
 cardcontent {
   display: flex;
-  flex-direction: column ;
+  flex-direction: column;
   gap: 16px;
 }
 
@@ -221,7 +213,6 @@ blockinput {
   line-height: 0px;
 }
 
-
 form {
   display: flex;
   justify-content: center;
@@ -245,25 +236,24 @@ formheader {
   align-items: center;
 }
 
-
-
 banner {
   display: flex;
   padding: 4px 32px;
-  background-color:#ff9c2b ;
+  background-color: #ff9c2b;
   color: white;
   gap: 32px;
   align-items: center;
   justify-content: space-between;
   width: 800px;
   border-radius: 0px 0px 5px 5px;
+  line-height: 0px;
 }
 
 .mini-banner {
   height: 70px;
   border-radius: 0px;
   background-color: white;
-  color: black
+  color: black;
 }
 
 .mini-banner > h3 {
@@ -289,11 +279,11 @@ footer {
 }
 
 backdrop {
-  display:  flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
-  background-color:rgba(22, 22, 22, 0.93);
+  background-color: rgba(22, 22, 22, 0.93);
   width: 100vw;
   height: 100%;
   top: 0;
@@ -303,23 +293,27 @@ backdrop {
 }
 
 prompt {
-     display: flex;
-     flex-direction: column;
-   background-color: #202020;
-   padding: 16px 32px;
+  display: flex;
+  flex-direction: column;
+  background-color: #202020;
+  padding: 32px;
+  justify-content: space-between;
+  align-content: space-between;
+  gap: 32px;
 }
 
 promptheader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-content: space-between;
+  line-height: 10px;
 }
 
 promptcontent {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px
+  gap: 16px;
 }
 
 icon {
@@ -327,37 +321,62 @@ icon {
   cursor: pointer;
 }
 
-
-
 splash {
-  background: url('/assets/splash/splash.png');
+  background: url("/assets/splash/splash.png");
   position: absolute;
-  width: 98vw;
-  height: 98vh;
+  width: 100vw;
+  height: 100vh;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: none;
 }
 
 splashcontent {
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
 }
 
 logo {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px
+  gap: 16px;
 }
-
 
 column {
   display: flex;
   flex-direction: column;
 }
 
-
 .row {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 16px;
+}
+
+.ref {
+  padding: 12px 12px;
+  justify-content: space-between;
+}
+
+toast {
+  background-color: white;
+  position: absolute;
+  top: 16vh;
+  right: 0;
+  margin-right: 32px;
+  z-index: 3;
+  padding: 16px;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+toast > label {
+  color: rgb(39, 175, 39);
 }

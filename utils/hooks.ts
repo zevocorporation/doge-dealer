@@ -3,6 +3,10 @@ import { useWeb3React } from "@web3-react/core";
 
 import { injected } from "./connectors";
 
+import Web3 from "web3";
+import { abi, address } from "./constants";
+import { async } from "../../../AppData/Local/Microsoft/TypeScript/4.3/node_modules/@types/regenerator-runtime";
+
 export function useEagerConnect() {
   const { activate, active } = useWeb3React();
 
@@ -70,4 +74,17 @@ export function useInactiveListener(suppress: boolean = false) {
       };
     }
   }, [active, error, suppress, activate]);
+}
+
+export function useReferalLogs() {
+  const { active, account } = useWeb3React();
+
+  useEffect(async () => {
+    if (active) {
+      const { ethereum } = window as any;
+      const web3 = new Web3(ethereum);
+      const contract = new web3.eth.Contract(abi, address);
+      return await contract.methods.balanceOf(account).call();
+    }
+  }, [active, account]);
 }

@@ -7,6 +7,7 @@ import {
 } from "@web3-react/core";
 
 import React from "react";
+import Web3 from "web3";
 
 function MyApp({ Component, pageProps }) {
   const context = useWeb3React();
