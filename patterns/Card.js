@@ -19,10 +19,6 @@ const Card = ({ variant, logo, title, content, isLoggedIn  }) => {
                 </cardheader>
                 <cardcontent>
                     {content}
-                    {content}
-                                        {content}
-                    {content}
-                    {content}
                 </cardcontent>
         </card>
     
@@ -35,7 +31,10 @@ const Card = ({ variant, logo, title, content, isLoggedIn  }) => {
         <cardheader>
           <h4>Leaderboard</h4>
           <tag>Weekly</tag>  
-        </cardheader>
+            </cardheader>
+            <cardcontent>
+              {content}
+            </cardcontent>
       </card>
     return (
         (!variant && renderDefaultCard) ||

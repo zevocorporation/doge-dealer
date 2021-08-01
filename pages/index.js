@@ -17,10 +17,21 @@ export default function Home() {
 
   const [splashIsOn, setSplashIsOn] = useState(false)
   const [switchReferrerIsOn, setSwitchReferrerIsOn] = useState(false)
-    const [inviteIsOn, setInviteIsOn] = useState(false)
+  const [inviteIsOn, setInviteIsOn] = useState(false)
   const [switchCoinIsOn,setSwitchCoinIsOn] = useState(false)
   const [connectWalletIsOn, setConnectWalletIsOn] = useState(false)
-  const [toastIsOn,setToastIsOn] = useState(false)
+  const [toastIsOn, setToastIsOn] = useState(false)
+  
+  const [address, setAddress] = useState('not connected')
+  const [balance, setBalance] = useState(1)
+  const [dividendEarnings, setDividendEarnings] = useState(1)
+  const [referralEarnings, setReferralEarnings] = useState(1)
+  const [amountIn, setAmountIn] = useState(1)
+  const [amountOut, setAmountOut] = useState(1)
+  const [priceInBNB, setPriceInBNB] = useState(1)
+
+  const [referrals, setReferrals] = useState([])
+  const [leaders, setLeaders] = useState(['kjha997','HIH85HC'])
 
   useEffect(() => {
 
@@ -29,6 +40,12 @@ export default function Home() {
   },[])
 
   // handler functions
+
+     const amountInHandler = (e) => {
+     e.preventDefault(e)
+     setAmountIn(e.target.value)
+  }
+
 
    const connectWalletHandler = (e) => {
      e.preventDefault(e)
@@ -81,7 +98,7 @@ export default function Home() {
           <label>
             Auto-dividend earnings
           </label>
-      <p>0</p>
+       <p>{dividendEarnings}</p>
     </blockcontent>
    </block>
   
@@ -126,7 +143,7 @@ export default function Home() {
           <label>
             Referral earnings
           </label>
-      <p>0</p>
+        <p>{referralEarnings}</p>
     </blockcontent>
   </block>
   
@@ -148,24 +165,53 @@ export default function Home() {
 
   const buyCoinFormContent =
     <>
-      <input type='number' placeholder='enter BNB amount' />
+      <input onChange={(e) => amountInHandler(e)} value={amountIn} type='number' min={1} placeholder='enter BNB amount' />
       <label>You will get</label>
-      <h3>{'0'} DOGEX</h3>
-            <label>for 50 BNB</label>
+      <h3>{amountOut} DOGEX</h3>
+            <label>for {amountIn} BNB</label>
             <button>Buy</button>
     </>
   
-    const refferalContent = <blockinput className='ref'>
+  const mapReferrals = referrals.map((referral, index) => {
+    return (
+    <blockinput className='ref' key={index}>
           <icon>
       <Image src='/assets/icons/icon-address.svg' alt='illustration' width='14px' height='14px' />
       </icon>
-      <p>                         A8BH..X8
+      <p>                        {referral}
+</p>
+          <icon onClick={(e)=> copyHandler(e)}>
+      <Image src='/assets/icons/icon-copy.svg' alt='illustration' width='14px' height='14px' />
+  </icon>
+      </blockinput>)
+  })
+  
+  const refferalContent = referrals.length !== 0 ? mapReferrals : <label style={{marginTop:'130px',alignSelf:'center', justifySelf:'center'}}>You havent reffered anyone yet.</label>
+  
+  
+   
+  const mapLeaders = leaders.map((leader, index) => {
+    return (<div  key={index}>
+       <blockinput className='ref'>
+          <icon>
+      <Image src='/assets/icons/icon-address.svg' alt='illustration' width='14px' height='14px' />
+      </icon>
+      <p>                        {leader}
 </p>
           <icon onClick={(e)=> copyHandler(e)}>
       <Image src='/assets/icons/icon-copy.svg' alt='illustration' width='14px' height='14px' />
   </icon>
       </blockinput>
-    
+      <block style={{marginTop:'12px'}} className='row'>
+        <label >Earned | 90 USD</label>
+                <label>Referrals | 8</label>
+
+     </block>
+    </div>)
+  })
+  
+  const leaderboardContent = leaders.length !== 0 ? mapLeaders : <label style={{marginTop:'130px',alignSelf:'center', justifySelf:'center'}}>The winners will be announced shortly.</label>
+ 
 
   const renderMain =
     <contentmain >
@@ -178,11 +224,11 @@ export default function Home() {
               <Image alt='info' src='/assets/icons/icon-asterisk.svg' height='10px' width='10px'/>
           </icon></span>You will be redirected to UNISWAP for buying DogeX</info>
         </block>
-        <Form label={'1 DogeX = 0.09 BNB'} content={buyCoinFormContent} />
+        <Form label={`1 DogeX =${priceInBNB} BNB`} content={buyCoinFormContent} />
                 {renderInviteBanner}
         {renderFeatureBanner}
       </column>
-      <Card variant='leaderboard-card'/>
+      <Card variant='leaderboard-card' content={leaderboardContent} />
     </contentmain>
   
   const renderSplash =
@@ -209,7 +255,7 @@ export default function Home() {
           <label>
             DOGEX Balance
           </label>
-      <p>0</p>
+      <p>{balance}</p>
     </blockcontent>
   </block>
 
@@ -224,18 +270,19 @@ export default function Home() {
     <button>Switch referrer</button>
     </>
   
-  const invitePromptContent = <>
+  const invitePromptContent = <div style={{display:'flex',flexDirection:'column', gap: '32px'}}>
   <blockinput className='ref'>
           <icon>
-      <Image src='/assets/icons/icon-address.svg' alt='illustration' width='14px' height='14px' />
+      <Image src='/assets/icons/icon-referrer.svg' alt='illustration' width='14px' height='14px' />
       </icon>
-      <p>                         A8BH..X8
+      <p>                        https://dogedealer.com/A8BHSDAA..97JGSX8
 </p>
           <icon onClick={(e)=> copyHandler(e)}>
       <Image src='/assets/icons/icon-copy.svg' alt='illustration' width='14px' height='14px' />
       </icon>
-    </blockinput>      <label style={{color: 'rgb(24, 177, 24)', fontSize:'10px'}}>Copy your link and invite friends via this link</label>
-</>
+    </blockinput>
+    <label style={{ color: 'rgb(24, 177, 24)', fontSize: '10px' }}>Copy your link and invite friends via this link</label>
+</div>
     
   
     const connectWalletPromptContent =
@@ -258,7 +305,7 @@ export default function Home() {
   </icon>
         <blockinputcontent>
           <label>My address</label>
-                  <p>x98abhv..87</p>
+          <p>{address}</p>
         </blockinputcontent>
           <icon onClick={(e)=> copyHandler(e)}>
       <Image  src='/assets/icons/icon-copy.svg' alt='illustration' width='14px' height='14px' />
