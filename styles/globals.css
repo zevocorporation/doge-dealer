@@ -163,8 +163,16 @@ count {
 }
 
 block {
-  display: grid;
-  width: 480px;
+  display: flex;
+  justify-content: center;
+    gap: 16px;
+}
+
+blockcontent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 0px;
 }
 
 blockheader {
@@ -173,6 +181,17 @@ blockheader {
   justify-content: space-between;
   align-items: center;
 }
+
+blockinput {
+  display: flex;
+  background-color: #222222;
+  padding: 12px 32px;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  line-height: 0px;
+}
+
 
 
 banner {
@@ -230,19 +249,7 @@ icon {
   cursor: pointer;
 }
 
-blockinformation {
-  display: flex;
-  justify-content: center;
-    align-items: start;  
-    gap: 16px;
-}
 
-blockcon {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-}
 
 splash {
   background: url('/assets/splash/splash.png');

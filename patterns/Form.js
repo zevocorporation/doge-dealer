@@ -3,17 +3,16 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { render } from 'react-dom'
 
-const Form = ({ variant, logo, title, content, isLoggedIn }) => {
+const Form = ({ variant, label, title, content }) => {
 
 
     
     const renderDefaultForm =
       <form>
         <formheader>
-          <h4>Buy DogeX</h4>
-          <label>1 DogeX = 0.09 BNB</label>
-          <input placeholder='enter BNB amount' />
-          <button>Buy now</button>
+          <h4>{title}</h4>
+          <label>{label}</label>
+          {content}
         </formheader>
         </form>
     

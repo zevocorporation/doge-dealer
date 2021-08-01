@@ -6,7 +6,7 @@ import styles from '../styles/Home.module.css'
 
 //import patterns 
 
-import {Header,Prompt,Card,Form,Footer} from '../patterns'
+import {Header,Prompt,Card,Form,Block, Footer} from '../patterns'
 
 
 //import data
@@ -64,7 +64,7 @@ export default function Home() {
     </Head>
   
     const renderMyEarningsBlock =
-  <block>
+      <block>
       <blockheader>
         <h4>Earnings in BNB     |  250 BNB</h4>
         <button className='button-mini'>
@@ -74,13 +74,17 @@ export default function Home() {
       </block>
   
 
-
+  const buyCoinFormContent =
+    <>
+      <input placeholder='enter BNB amount' />
+    <button>Buy now</button>
+    </>
 
   const renderMain =
     <contentmain >
       <Card variant='referrals-card' />
       <column>{renderMyEarningsBlock}
-        <Form />
+        <Form title={'Buy DogeX'} label={'1 DogeX = 0.09 BNB'} content={buyCoinFormContent} />
       </column>
       <Card variant='leaderboard-card'/>
     </contentmain>
@@ -97,30 +101,19 @@ export default function Home() {
 
   
 
-  const renderReferrerBlock = <blockinformation>
-    <icon>
-      <Image src='/assets/icons/icon-referrer.svg' alt='illustration' width='24px' height='24px' />
-  </icon>
-          <blockcon>
-          <label>
-            Referrer address
-          </label>
-      <p>0x4c7...497A1De2a69</p>
-    </blockcon>
-  </blockinformation>
   
 
-  const renderBalanceBlock = <blockinformation>
+  const renderBalanceBlock = <block>
     <icon>
       <Image src='/assets/icons/icon-balance.svg' alt='illustration' width='24px' height='24px' />
   </icon>
-          <blockcon>
+          <blockcontent>
           <label>
             DOGEX Balance
           </label>
       <p>0</p>
-    </blockcon>
-  </blockinformation>
+    </blockcontent>
+  </block>
 
   // rendering contents
 
@@ -139,9 +132,20 @@ export default function Home() {
 
   const headerContent =
   <>
-      {renderReferrerBlock}
+      <Block />
       <button onClick={(e) => switchReferrerHandler(e)} className='button-mini'>Switch referrer</button>
-      <inputblock><p>x98abhv..87</p></inputblock>
+      <blockinput>
+          <icon>
+      <Image src='/assets/icons/icon-address.svg' alt='illustration' width='24px' height='24px' />
+  </icon>
+        <blockinputcontent>
+          <label>DOGEX Balance</label>
+                  <p>x98abhv..87</p>
+        </blockinputcontent>
+          <icon>
+      <Image src='/assets/icons/icon-copy.svg' alt='illustration' width='24px' height='24px' />
+  </icon>
+      </blockinput>
       {renderBalanceBlock}
       <button onClick={(e)=> connectWalletHandler(e)}>Connect wallet</button>
   </>
