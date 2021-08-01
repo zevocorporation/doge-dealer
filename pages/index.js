@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-
+import { useRouter } from 'next/router'
 //import patterns 
 
 import {Header,Prompt,Card,Form,Block, Footer} from '../patterns'
@@ -15,14 +15,18 @@ import {seo, settings} from '../data'
 
 export default function Home() {
 
+  const router = useRouter()
+
   const [splashIsOn, setSplashIsOn] = useState(false)
   const [switchReferrerIsOn, setSwitchReferrerIsOn] = useState(false)
   const [inviteIsOn, setInviteIsOn] = useState(false)
-  const [switchCoinIsOn,setSwitchCoinIsOn] = useState(false)
+  const [switchCoinIsOn, setSwitchCoinIsOn] = useState(false)
+    const [acceptReferrerIsOn,setAcceptReferrerIsOn] = useState(false)
   const [connectWalletIsOn, setConnectWalletIsOn] = useState(false)
   const [toastIsOn, setToastIsOn] = useState(false)
   
   const [address, setAddress] = useState('not connected')
+    const [referrerAddress, setReferrerAddress] = useState('no referrer yet')
   const [balance, setBalance] = useState(1)
   const [dividendEarnings, setDividendEarnings] = useState(1)
   const [referralEarnings, setReferralEarnings] = useState(1)
@@ -30,16 +34,39 @@ export default function Home() {
   const [amountOut, setAmountOut] = useState(1)
   const [priceInBNB, setPriceInBNB] = useState(1)
 
-  const [referrals, setReferrals] = useState([])
-  const [leaders, setLeaders] = useState([{address:'JH87SHV..HI',referrals: 23, earnings: 59}])
+  const [referrals, setReferrals] = useState(['KHS86..SIH','SSD97..97'])
+  const [leaders, setLeaders] = useState([{address:'JH87SHV..HI',referrals: 23, earnings: 59},{address:'87SHS9V..I4',referrals: 3, earnings: 509}])
 
   useEffect(() => {
-
     setSplashIsOn(true)
     setTimeout(() => { setSplashIsOn(false) }, 2000)
-  },[])
+  }, [])
+  
+
+  useEffect(() => {
+    if (!window.ethereum)
+    {
+    alert('Please install metamask wallet extension in your to continue')
+    }
+  }, [address])
+  
+  useEffect(() => {
+    if (router.query.referrer)
+    {
+      setAcceptReferrerIsOn(true)
+      }
+  }, [router.query.referrer])
+  
+
 
   // handler functions
+
+  const acceptReferrerHandler = (e) => {
+     e.preventDefault(e)
+    setReferrerAddress(router.query.referrer)
+    setAcceptReferrerIsOn(false)
+  }
+
 
      const amountInHandler = (e) => {
      e.preventDefault(e)
@@ -270,12 +297,23 @@ export default function Home() {
     <button>Switch referrer</button>
     </>
   
+  const acceptReferrerPromptContent =   
+    <blockinput className='ref'>
+          <icon>
+      <Image src='/assets/icons/icon-referrer.svg' alt='illustration' width='14px' height='14px' />
+      </icon>
+      <p>                        {router.query.referrer}
+</p>
+         <button onClick={(e)=> acceptReferrerHandler(e)}>Accept referrer</button>
+    </blockinput>
+  
+  
   const invitePromptContent = <div style={{display:'flex',flexDirection:'column', gap: '32px'}}>
   <blockinput className='ref'>
           <icon>
       <Image src='/assets/icons/icon-referrer.svg' alt='illustration' width='14px' height='14px' />
       </icon>
-      <p>                        https://dogedealer.com/A8BHSDAA..97JGSX8
+      <p>                        {settings.application_base_url}/?referrer={address}
 </p>
           <icon onClick={(e)=> copyHandler(e)}>
       <Image src='/assets/icons/icon-copy.svg' alt='illustration' width='14px' height='14px' />
@@ -330,20 +368,24 @@ export default function Home() {
       <content>
         {renderMain}
         <Prompt
-          isOpen={switchReferrerIsOn || connectWalletIsOn || switchCoinIsOn || inviteIsOn}
+          isOpen={switchReferrerIsOn || connectWalletIsOn || switchCoinIsOn || inviteIsOn || acceptReferrerIsOn}
           setIsOpen={switchReferrerIsOn && setSwitchReferrerIsOn
             || connectWalletIsOn && setConnectWalletIsOn ||
             switchCoinIsOn && setSwitchCoinIsOn ||
-            inviteIsOn && setInviteIsOn
+            inviteIsOn && setInviteIsOn ||
+            acceptReferrerIsOn && setAcceptReferrerIsOn
           }
           title={switchReferrerIsOn && 'Switch Referrer' ||
             connectWalletIsOn && 'Select a wallet' ||
             switchCoinIsOn && 'Feature under construction' ||
-            inviteIsOn && 'Your invite link'}
+            inviteIsOn && 'Your invite link' ||
+            acceptReferrerIsOn && 'Accept referrer'
+          }
           content={switchReferrerIsOn && switchReferrerPromptContent
             || connectWalletIsOn && connectWalletPromptContent ||
             switchCoinIsOn && switchCoinPromptContent ||
-            inviteIsOn && invitePromptContent} />
+            inviteIsOn && invitePromptContent ||
+            acceptReferrerIsOn && acceptReferrerPromptContent} />
       </content>
 
 
