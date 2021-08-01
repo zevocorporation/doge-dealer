@@ -31,7 +31,7 @@ export default function Home() {
   const [priceInBNB, setPriceInBNB] = useState(1)
 
   const [referrals, setReferrals] = useState([])
-  const [leaders, setLeaders] = useState(['kjha997','HIH85HC'])
+  const [leaders, setLeaders] = useState([{address:'JH87SHV..HI',referrals: 23, earnings: 59}])
 
   useEffect(() => {
 
@@ -196,15 +196,15 @@ export default function Home() {
           <icon>
       <Image src='/assets/icons/icon-address.svg' alt='illustration' width='14px' height='14px' />
       </icon>
-      <p>                        {leader}
+      <p>                        {leader.address}
 </p>
           <icon onClick={(e)=> copyHandler(e)}>
       <Image src='/assets/icons/icon-copy.svg' alt='illustration' width='14px' height='14px' />
   </icon>
       </blockinput>
       <block style={{marginTop:'12px'}} className='row'>
-        <label >Earned | 90 USD</label>
-                <label>Referrals | 8</label>
+        <label >Earned | {leader.earnings} USD</label>
+        <label>Referrals | {leader.referrals}</label>
 
      </block>
     </div>)
