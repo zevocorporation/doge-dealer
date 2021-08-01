@@ -1,0 +1,8 @@
+{
+    "application_name" : "Dogedealer",
+    "application_logo_path" : "/assets/logos/logo.png",
+    "application_splash_path" : "/assets/splash/splash.png",
+    "socialmediahandles" : {
+        "linkedin" : "/dogedealer"
+    }
+}
