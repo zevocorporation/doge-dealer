@@ -16,8 +16,11 @@ import {seo, settings} from '../data'
 export default function Home() {
 
   const [splashIsOn, setSplashIsOn] = useState(false)
-  const [switchReferrerIsOn,setSwitchReferrerIsOn] = useState(false)
-  const [connectWalletIsOn,setConnectWalletIsOn] = useState(false)
+  const [switchReferrerIsOn, setSwitchReferrerIsOn] = useState(false)
+    const [inviteIsOn, setInviteIsOn] = useState(false)
+  const [switchCoinIsOn,setSwitchCoinIsOn] = useState(false)
+  const [connectWalletIsOn, setConnectWalletIsOn] = useState(false)
+  const [toastIsOn,setToastIsOn] = useState(false)
 
   useEffect(() => {
 
@@ -29,12 +32,12 @@ export default function Home() {
 
    const connectWalletHandler = (e) => {
      e.preventDefault(e)
-     console.log('connecting...')
      setConnectWalletIsOn(true)
   }
 
   const inviteHandler = (e) => {
     e.preventDefault(e)
+    setInviteIsOn(true)
   }
 
   const buyCoinHandler = (e) => {
@@ -43,10 +46,16 @@ export default function Home() {
 
   const copyHandler = (e) => {
     e.preventDefault(e)
+    setToastIsOn(true)
+    if (inviteIsOn) {
+      setInviteIsOn(false)
+    }
+    setTimeout(() => { setToastIsOn(false) }, 1000)
   }
 
   const switchCoinHandler = (e) => {
     e.preventDefault(e)
+         setSwitchCoinIsOn(true)
   }
 
   const switchReferrerHandler = (e) => {
@@ -85,7 +94,7 @@ export default function Home() {
       <h2>
         AUTO DIVIDENDS
         </h2>
-        <button>
+        <button onClick={(e)=> inviteHandler(e)}>
           Get invite link
         </button>
       </>
@@ -95,14 +104,16 @@ export default function Home() {
                 <Image src='/assets/images/doge-dog.png' alt='illustration' width='68px' height='85px' />
 
         <div style={{ display: 'grid', flexDirection: 'row', lineHeight: '0px'}}>
-           <h3>
-          Switch earnings
+        <column className='row'>
+        <h3>
+          Switch earnings to
         </h3>
-          <h2>
+          <h2 style={{ color: 'black'}}>
           DOGE COIN.
-        </h2>
+          </h2>
+        </column>
         </div>
-        <p>Feature releasing next in a while.</p>
+        <p>Upnext ! Feature releasing in a while.</p>
       </banner>
   
   
@@ -129,7 +140,7 @@ export default function Home() {
   
           {renderAutoDividendEarningsBlock}
         {renderReferralEarningBlock}
-              <button className='button-mini'>
+              <button onClick={(e)=>switchCoinHandler(e)} className='button-mini'>
           switch coin
         </button>
       </block>
@@ -143,10 +154,22 @@ export default function Home() {
             <label>for 50 BNB</label>
             <button>Buy</button>
     </>
+  
+    const refferalContent = <blockinput className='ref'>
+          <icon>
+      <Image src='/assets/icons/icon-address.svg' alt='illustration' width='14px' height='14px' />
+      </icon>
+      <p>                         A8BH..X8
+</p>
+          <icon onClick={(e)=> copyHandler(e)}>
+      <Image src='/assets/icons/icon-copy.svg' alt='illustration' width='14px' height='14px' />
+  </icon>
+      </blockinput>
+    
 
   const renderMain =
     <contentmain >
-      <Card variant='referrals-card' />
+      <Card variant='referrals-card' content={refferalContent} />
       <column>{renderMyEarningsBlock}
         <block className='row'>
           <h3>Stake DogeX and start earning BNB / DOGE</h3>
@@ -165,7 +188,9 @@ export default function Home() {
   const renderSplash =
   <splash>
       <splashcontent>
-      <p>loading</p>
+        <Image alt='logo' src='/assets/logos/logo.png' width= '120px' height='120px'/>
+        <h3>Dogedealer</h3>
+      <p>loading...</p>
       </splashcontent>
   </splash>
   
@@ -197,16 +222,31 @@ export default function Home() {
   <>
     <input placeholder='paste new referrer address here' />
     <button>Switch referrer</button>
-  </>
+    </>
+  
+  const invitePromptContent = <>
+  <blockinput className='ref'>
+          <icon>
+      <Image src='/assets/icons/icon-address.svg' alt='illustration' width='14px' height='14px' />
+      </icon>
+      <p>                         A8BH..X8
+</p>
+          <icon onClick={(e)=> copyHandler(e)}>
+      <Image src='/assets/icons/icon-copy.svg' alt='illustration' width='14px' height='14px' />
+      </icon>
+    </blockinput>      <label style={{color: 'rgb(24, 177, 24)', fontSize:'10px'}}>Copy your link and invite friends via this link</label>
+</>
+    
   
     const connectWalletPromptContent =
   <>
         <icon>
                 <Image src='/assets/logos/logo-metamask.png' alt='logo-metamask' width='146px' height='70px' />
         </icon>
-    <button>Connect wallet</button>
+    <button>Connect now</button>
   </>
   
+      const switchCoinPromptContent = <label>We are building a feature to switch earnings to DOGE. Releasing in a while.</label>
 
   const headerContent =
   <>
@@ -220,17 +260,22 @@ export default function Home() {
           <label>My address</label>
                   <p>x98abhv..87</p>
         </blockinputcontent>
-          <icon>
-      <Image src='/assets/icons/icon-copy.svg' alt='illustration' width='24px' height='24px' />
+          <icon onClick={(e)=> copyHandler(e)}>
+      <Image  src='/assets/icons/icon-copy.svg' alt='illustration' width='14px' height='14px' />
   </icon>
       </blockinput>
       {renderBalanceBlock}
-      <button onClick={(e)=> connectWalletHandler(e)}>Connect wallet</button>
-  </>
+      <button onClick={(e)=> connectWalletHandler(e)}>Connect</button>
+    </>
+  
+  const renderCopiedToast =
+  <toast>
+      <label>copied address</label>
+  </toast>
  
   return (
     <div className={styles.container}>
-      
+      {toastIsOn && renderCopiedToast}
       {renderseo}
       {splashIsOn && renderSplash}
       <Header logo={settings.application_logo_path} title={settings.application_name} content={headerContent} isLoggedIn={ false}/>
@@ -238,13 +283,20 @@ export default function Home() {
       <content>
         {renderMain}
         <Prompt
-          isOpen={switchReferrerIsOn || connectWalletIsOn}
+          isOpen={switchReferrerIsOn || connectWalletIsOn || switchCoinIsOn || inviteIsOn}
           setIsOpen={switchReferrerIsOn && setSwitchReferrerIsOn
-            || connectWalletIsOn && setConnectWalletIsOn}
+            || connectWalletIsOn && setConnectWalletIsOn ||
+            switchCoinIsOn && setSwitchCoinIsOn ||
+            inviteIsOn && setInviteIsOn
+          }
           title={switchReferrerIsOn && 'Switch Referrer' ||
-                  connectWalletIsOn && 'Select a wallet'}
+            connectWalletIsOn && 'Select a wallet' ||
+            switchCoinIsOn && 'Feature under construction' ||
+            inviteIsOn && 'Your invite link'}
           content={switchReferrerIsOn && switchReferrerPromptContent
-            || connectWalletIsOn && connectWalletPromptContent} />
+            || connectWalletIsOn && connectWalletPromptContent ||
+            switchCoinIsOn && switchCoinPromptContent ||
+            inviteIsOn && invitePromptContent} />
       </content>
 
 
