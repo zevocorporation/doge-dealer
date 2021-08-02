@@ -193,7 +193,6 @@ blockcontent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  line-height: 0px;
 }
 
 blockheader {
@@ -210,7 +209,6 @@ blockinput {
   gap: 16px;
   align-items: center;
   justify-content: center;
-  line-height: 0px;
 }
 
 form {
@@ -226,7 +224,6 @@ formcontent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  line-height: 0px;
 }
 
 formheader {
@@ -246,7 +243,6 @@ banner {
   justify-content: space-between;
   width: 800px;
   border-radius: 0px 0px 5px 5px;
-  line-height: 0px;
 }
 
 .mini-banner {
@@ -306,7 +302,6 @@ promptheader {
   display: flex;
   justify-content: space-between;
   align-content: space-between;
-  line-height: 10px;
 }
 
 promptcontent {
