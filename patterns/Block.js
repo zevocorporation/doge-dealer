@@ -37,7 +37,11 @@ const Block = ({ variant, logo, title, content, isLoggedIn }) => {
       </icon>
       <blockcontent>
         <label>Referrer address</label>
-        <p>{Referrer}</p>
+        {Referrer && (
+          <p>{`${Referrer?.slice(0, 6)}...${Referrer?.slice(
+            Referrer?.length - 6
+          )}`}</p>
+        )}
       </blockcontent>
     </block>
   );

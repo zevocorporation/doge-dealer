@@ -17,6 +17,10 @@ import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { injected } from "../utils/connectors";
 import Web3 from "web3";
 
+const getFlooredFixed = (v, d) => {
+  return (Math.floor(v * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);
+};
+
 export default function Home() {
   const router = useRouter();
 
@@ -412,7 +416,7 @@ export default function Home() {
             />
           </icon>
         </blockinput>
-        <block style={{ marginTop: "12px" }} className="row">
+        <block style={{ marginTop: "12px" }} className="card_row">
           <label>Earned | {leader.earnings} USD</label>
           <label>Referrals | {leader.referrals}</label>
         </block>
@@ -498,7 +502,7 @@ export default function Home() {
       </icon>
       <blockcontent>
         <label>DOGEX Balance</label>
-        <p>{balance}</p>
+        <p>{balance && getFlooredFixed(balance, 2)}</p>
       </blockcontent>
     </block>
   );
@@ -622,11 +626,17 @@ export default function Home() {
               alt="illustration"
               width="24px"
               height="24px"
+              layout="fixed"
+              objectFit="contain"
             />
           </icon>
           <blockinputcontent>
             <label>My address</label>
-            <p>{account}</p>
+            {account && (
+              <p>{`${account?.slice(0, 6)}...${account?.slice(
+                account?.length - 6
+              )}`}</p>
+            )}
           </blockinputcontent>
           <icon onClick={(e) => copyHandler(e)}>
             <Image
@@ -634,6 +644,8 @@ export default function Home() {
               alt="illustration"
               width="14px"
               height="14px"
+              layout="fixed"
+              objectFit="contain"
             />
           </icon>
         </blockinput>

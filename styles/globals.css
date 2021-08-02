@@ -21,6 +21,7 @@ a {
   box-sizing: border-box;
   font-family: Barlow;
   border-radius: 5px;
+  line-height: normal;
 }
 
 p {
@@ -36,7 +37,7 @@ h3,
 h4 {
   color: whitesmoke;
   font-weight: 100;
-  margin: 22px 0px;
+  /* margin: 22px 0px; */
 }
 
 h4 {
@@ -217,6 +218,7 @@ blockinput {
   align-items: center;
   justify-content: center;
   line-height: 0px;
+  white-space: nowrap;
 }
 
 form {
@@ -369,6 +371,13 @@ column {
   gap: 16px;
 }
 
+.card_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
 .ref {
   display: flex;
   padding: 12px 12px;
@@ -396,6 +405,20 @@ toast > label {
   grid-gap: 2em;
 }
 
+.header_content {
+  display: flex;
+  align-items: center;
+  grid-gap: 2em;
+}
+
+.hamburger {
+  display: none;
+}
+
+.hamburger > div {
+  cursor: pointer;
+}
+
 @media (max-width: 992px) {
   contentmain {
     display: grid;
@@ -413,10 +436,28 @@ toast > label {
     height: auto;
     position: static;
     padding: 10px 32px;
+    grid-gap: 1em;
+  }
+
+  .header_content {
+    flex-direction: column;
+    display: none;
+    width: 100%;
+    grid-gap: 1em;
+  }
+
+  .header_content.active {
+    display: flex;
+  }
+
+  .hamburger {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
   }
 
   content {
-    margin-top: 2em;
+    margin-top: 1em;
   }
 
   .header_routes {
@@ -429,28 +470,23 @@ toast > label {
     justify-content: unset;
   }
 
+  .card_row {
+    justify-content: space-between;
+  }
+
   .row {
     align-items: center;
     justify-content: center;
     flex-direction: column;
     margin-bottom: 1em;
-  }
-}
-
-@media (max-width: 576px) {
-  contentmain {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "columnarea"
-      "leaderboard"
-      "refferal";
+    grid-gap: 10px;
   }
 
   banner {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    grid-gap: 10px;
   }
 
   .mini-banner {
@@ -461,5 +497,25 @@ toast > label {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    grid-gap: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  contentmain {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "columnarea"
+      "refferal"
+      "leaderboard";
+  }
+
+  button {
+    width: 100%;
+  }
+
+  blockinput {
+    padding: 12px 1em;
   }
 }
