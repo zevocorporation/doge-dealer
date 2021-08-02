@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { abi, address } from "../utils/constants";
 import { useEagerConnect, useInactiveListener } from "../utils/hooks.ts";
+import { Fetcher, WETH, Token, Route } from "@uniswap/sdk";
 
 import { useRouter } from "next/router";
 //import patterns
@@ -31,14 +32,16 @@ export default function Home() {
   const [acceptReferrerIsOn, setAcceptReferrerIsOn] = useState(false);
   const [connectWalletIsOn, setConnectWalletIsOn] = useState(false);
   const [toastIsOn, setToastIsOn] = useState(false);
+  const [price, setPrice] = useState();
 
   //const [address, setAddress] = useState("not connected");
   const [referrerAddress, setReferrerAddress] = useState("no referrer yet");
-  const [dividendEarnings, setDividendEarnings] = useState(1);
-  const [referralEarnings, setReferralEarnings] = useState(1);
-  const [amountIn, setAmountIn] = useState(1);
-  const [amountOut, setAmountOut] = useState(1);
-  const [priceInBNB, setPriceInBNB] = useState(1);
+  const [dividendEarnings, setDividendEarnings] = useState("--");
+  const [referralEarnings, setReferralEarnings] = useState();
+  const [amountIn, setAmountIn] = useState(0);
+  const [priceInBNB, setPriceInBNB] = useState();
+
+  const [amountOut, setAmountOut] = useState("--");
 
   const [referrals, setReferrals] = useState([1, 2]);
   const [leaders, setLeaders] = useState([
@@ -50,7 +53,7 @@ export default function Home() {
   const [balance, setBalance] = useState();
   const [newReferer, setNewReferer] = useState();
 
-  const { activate, active, account, connector } = useWeb3React();
+  const { activate, active, account, connector, chainId } = useWeb3React();
   const [activatingConnector, setActivatingConnector] = React.useState();
 
   // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
@@ -68,10 +71,10 @@ export default function Home() {
       const balance = await updateBalance(account);
       setBalance(Web3.utils.fromWei(balance));
       const referals = await totalReferals(account);
-      console.log(referals);
       setReferrals(referals);
       await referalEarnings();
       await leaderBoard();
+      getPriceofBiki();
     } else {
       setWalletStatus("Connect Wallet to Proceed⚛");
     }
@@ -80,7 +83,7 @@ export default function Home() {
     setTimeout(() => {
       setSplashIsOn(false);
     }, 2000);
-  }, [active, , activatingConnector, connector, account]);
+  }, [active, activatingConnector, connector, account]);
 
   useEffect(() => {
     setSplashIsOn(true);
@@ -97,15 +100,23 @@ export default function Home() {
 
   // handler functions
 
-  const acceptReferrerHandler = (e) => {
+  const acceptReferrerHandler = async (e) => {
     e.preventDefault(e);
     setReferrerAddress(router.query.referrer);
     setAcceptReferrerIsOn(false);
+
+    return await new new Web3(window.ethereum).eth.Contract(
+      abi,
+      address
+    ).methods
+      .setReferer(router.query.referrer)
+      .send({ from: window.ethereum.selectedAddress });
   };
 
   const amountInHandler = (e) => {
     e.preventDefault(e);
     setAmountIn(e.target.value);
+    setAmountOut(e.target.value / priceInBNB);
   };
 
   const connectWalletHandler = (e) => {
@@ -120,6 +131,26 @@ export default function Home() {
     ).methods
       .balanceOf(_address)
       .call();
+  };
+
+  const getPriceofBiki = () => {
+    const tokenAddress = address; // must be checksummed
+    const decimals = 18;
+    const BIKI = new Token(chainId, tokenAddress, decimals);
+
+    const price = Promise.resolve(
+      Fetcher.fetchPairData(BIKI, WETH[BIKI.chainId]),
+      window.ethereum
+    )
+      .then((pair) => {
+        return new Route([pair], WETH[BIKI.chainId]);
+      })
+      .then((route) => {
+        return route.midPrice.toSignificant(6);
+      })
+      .then((res) => {
+        setPriceInBNB(1 / res);
+      });
   };
 
   const totalReferals = async (_address) => {
@@ -232,7 +263,7 @@ export default function Home() {
     e.preventDefault(e);
   };
 
-  const copyHandler = (e) => {
+  const copyHandler = (e, msg) => {
     e.preventDefault(e);
     setToastIsOn(true);
     if (inviteIsOn) {
@@ -354,7 +385,15 @@ export default function Home() {
       <label>You will get</label>
       <h3>{amountOut} DOGEX</h3>
       <label>for {amountIn} BNB</label>
-      <button>Buy</button>
+      <button
+        onClick={() => {
+          window.open(
+            "https://app.uniswap.org/#/swap?outputCurrency=".concat(address)
+          );
+        }}
+      >
+        Buy
+      </button>
     </>
   );
 
@@ -563,7 +602,7 @@ export default function Home() {
           {" "}
           {settings.application_base_url}/?referrer={account}
         </p>
-        <icon onClick={(e) => copyHandler(e)}>
+        <icon onClick={(e) => copyHandler(e, "url")}>
           <Image
             src="/assets/icons/icon-copy.svg"
             alt="illustration"

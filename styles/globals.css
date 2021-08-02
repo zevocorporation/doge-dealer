@@ -234,7 +234,6 @@ formcontent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  line-height: 0px;
 }
 
 formheader {
@@ -254,7 +253,6 @@ banner {
   align-items: center;
   justify-content: space-between;
   border-radius: 0px 0px 5px 5px;
-  line-height: 0px;
 }
 
 .mini-banner {
@@ -315,7 +313,6 @@ promptheader {
   display: flex;
   justify-content: space-between;
   align-content: space-between;
-  line-height: 10px;
 }
 
 promptcontent {
