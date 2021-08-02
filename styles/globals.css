@@ -386,6 +386,12 @@ toast > label {
   color: rgb(39, 175, 39);
 }
 
+.header_routes {
+  display: flex;
+  align-items: center;
+  grid-gap: 2em;
+}
+
 @media (max-width: 992px) {
   contentmain {
     display: grid;
@@ -398,11 +404,32 @@ toast > label {
 
 @media (max-width: 768px) {
   header {
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
     flex-direction: column;
     height: auto;
     position: static;
+    padding: 10px 32px;
+  }
+
+  content {
+    margin-top: 2em;
+  }
+
+  .header_routes {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  block {
+    justify-content: unset;
+  }
+
+  .row {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 1em;
   }
 }
 
@@ -412,8 +439,8 @@ toast > label {
     grid-template-columns: 1fr;
     grid-template-areas:
       "columnarea"
-      "refferal"
-      "leaderboard";
+      "leaderboard"
+      "refferal";
   }
 
   banner {
@@ -426,7 +453,7 @@ toast > label {
     height: auto;
   }
 
-  .row {
+  formheader {
     align-items: center;
     justify-content: center;
     flex-direction: column;

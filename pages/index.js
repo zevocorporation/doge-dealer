@@ -644,33 +644,40 @@ export default function Home() {
 
   const headerContent = (
     <>
-      <Block />
-      <button onClick={(e) => switchReferrerHandler(e)} className="button-mini">
-        Switch referrer
-      </button>
-      <blockinput>
-        <icon>
-          <Image
-            src="/assets/icons/icon-address.svg"
-            alt="illustration"
-            width="24px"
-            height="24px"
-          />
-        </icon>
-        <blockinputcontent>
-          <label>My address</label>
-          <p>{account}</p>
-        </blockinputcontent>
-        <icon onClick={(e) => copyHandler(e)}>
-          <Image
-            src="/assets/icons/icon-copy.svg"
-            alt="illustration"
-            width="14px"
-            height="14px"
-          />
-        </icon>
-      </blockinput>
-      {renderBalanceBlock}
+      <div className="header_routes">
+        <Block />
+        <button
+          onClick={(e) => switchReferrerHandler(e)}
+          className="button-mini"
+        >
+          Switch referrer
+        </button>
+      </div>
+      <div className="header_routes">
+        <blockinput>
+          <icon>
+            <Image
+              src="/assets/icons/icon-address.svg"
+              alt="illustration"
+              width="24px"
+              height="24px"
+            />
+          </icon>
+          <blockinputcontent>
+            <label>My address</label>
+            <p>{account}</p>
+          </blockinputcontent>
+          <icon onClick={(e) => copyHandler(e)}>
+            <Image
+              src="/assets/icons/icon-copy.svg"
+              alt="illustration"
+              width="14px"
+              height="14px"
+            />
+          </icon>
+        </blockinput>
+        {renderBalanceBlock}
+      </div>
       <button onClick={() => activate(injected)}>{WalletStatus}</button>
     </>
   );
