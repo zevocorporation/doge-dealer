@@ -417,8 +417,8 @@ toast > label {
     grid-template-columns: 1fr;
     grid-template-areas:
       "columnarea"
-      "refferal"
-      "leaderboard";
+      "leaderboard"
+      "refferal";
   }
 
   banner {
@@ -432,6 +432,12 @@ toast > label {
   }
 
   .row {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  formheader {
     align-items: center;
     justify-content: center;
     flex-direction: column;
