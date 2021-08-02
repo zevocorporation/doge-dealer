@@ -6,7 +6,7 @@ const Card = ({ variant, logo, title, content, count }) => {
   const renderDefaultCard = <p>card</p>;
 
   const renderReferralsCard = (
-    <card>
+    <card className="refferalCard">
       <cardheader>
         <h4>My Referrals</h4>
         <count>{count}</count>
@@ -16,7 +16,7 @@ const Card = ({ variant, logo, title, content, count }) => {
   );
 
   const renderLeaderboardCard = (
-    <card>
+    <card className="leaderboardCard">
       <cardheader>
         <h4>Leaderboard</h4>
         <tag>Weekly</tag>

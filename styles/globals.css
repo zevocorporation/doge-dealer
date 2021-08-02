@@ -9,7 +9,7 @@ body {
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box; /* Firefox, other Gecko */
   box-sizing: border-box; /* Opera/IE 8+ */
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 a {
@@ -143,7 +143,7 @@ header {
 content {
   margin-top: 20vh;
   width: 100%;
-  height: 100%;
+  height: auto;
   justify-content: space-around;
 }
 
@@ -157,11 +157,18 @@ contentmain {
 
 /* card styling */
 
+.leaderboardCard {
+  grid-area: leaderboard;
+}
+
+.refferalCard {
+  grid-area: refferal;
+}
+
 card {
   background-color: #262626;
-  height: 400px;
   border-radius: 5px;
-  padding: 0px 16px;
+  padding: 16px;
 }
 
 cardheader {
@@ -234,6 +241,7 @@ formheader {
 }
 
 banner {
+  width: 100%;
   display: flex;
   padding: 4px 32px;
   background-color: #ff9c2b;
@@ -241,11 +249,11 @@ banner {
   gap: 32px;
   align-items: center;
   justify-content: space-between;
-  width: 800px;
   border-radius: 0px 0px 5px 5px;
 }
 
 .mini-banner {
+  width: 100%;
   height: 70px;
   border-radius: 0px;
   background-color: white;
@@ -345,6 +353,7 @@ logo {
 }
 
 column {
+  grid-area: columnarea;
   display: flex;
   flex-direction: column;
 }
@@ -375,4 +384,51 @@ toast {
 
 toast > label {
   color: rgb(39, 175, 39);
+}
+
+@media (max-width: 992px) {
+  contentmain {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "columnarea columnarea"
+      "refferal leaderboard";
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: auto;
+    position: static;
+  }
+}
+
+@media (max-width: 576px) {
+  contentmain {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "columnarea"
+      "refferal"
+      "leaderboard";
+  }
+
+  banner {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .mini-banner {
+    height: auto;
+  }
+
+  .row {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
 }
