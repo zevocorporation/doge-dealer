@@ -75,16 +75,3 @@ export function useInactiveListener(suppress: boolean = false) {
     }
   }, [active, error, suppress, activate]);
 }
-
-export function useReferalLogs() {
-  const { active, account } = useWeb3React();
-
-  useEffect(async () => {
-    if (active) {
-      const { ethereum } = window as any;
-      const web3 = new Web3(ethereum);
-      const contract = new web3.eth.Contract(abi, address);
-      return await contract.methods.balanceOf(account).call();
-    }
-  }, [active, account]);
-}

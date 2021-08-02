@@ -1,5 +1,6 @@
 {
     "application_name" : "Dogedealer",
+    "application_base_url": "https://dogedealer.com",
     "application_logo_path" : "/assets/logos/logo.png",
     "application_splash_path" : "/assets/splash/splash.png",
     "socialmediahandles" : {

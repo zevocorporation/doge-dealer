@@ -3,7 +3,9 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { abi, address } from "../utils/constants";
+import { useEagerConnect, useInactiveListener } from "../utils/hooks.ts";
 
+import { useRouter } from "next/router";
 //import patterns
 
 import { Header, Prompt, Card, Form, Block, Footer } from "../patterns";
@@ -11,38 +13,95 @@ import { Header, Prompt, Card, Form, Block, Footer } from "../patterns";
 //import data
 
 import { seo, settings } from "../data";
-import { useWeb3React } from "@web3-react/core";
+import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { injected } from "../utils/connectors";
 import Web3 from "web3";
 
 export default function Home() {
+  const router = useRouter();
+
   const [splashIsOn, setSplashIsOn] = useState(false);
   const [switchReferrerIsOn, setSwitchReferrerIsOn] = useState(false);
   const [inviteIsOn, setInviteIsOn] = useState(false);
   const [switchCoinIsOn, setSwitchCoinIsOn] = useState(false);
+  const [acceptReferrerIsOn, setAcceptReferrerIsOn] = useState(false);
   const [connectWalletIsOn, setConnectWalletIsOn] = useState(false);
   const [toastIsOn, setToastIsOn] = useState(false);
+
+  //const [address, setAddress] = useState("not connected");
+  const [referrerAddress, setReferrerAddress] = useState("no referrer yet");
+  const [dividendEarnings, setDividendEarnings] = useState(1);
+  const [referralEarnings, setReferralEarnings] = useState(1);
+  const [amountIn, setAmountIn] = useState(1);
+  const [amountOut, setAmountOut] = useState(1);
+  const [priceInBNB, setPriceInBNB] = useState(1);
+
+  const [referrals, setReferrals] = useState([1, 2]);
+  const [leaders, setLeaders] = useState([
+    { address: "JH87SHV..HI", referrals: 23, earnings: 59 },
+    { address: "87SHS9V..I4", referrals: 3, earnings: 509 },
+  ]);
+
   const [WalletStatus, setWalletStatus] = useState();
   const [balance, setBalance] = useState();
+  const [newReferer, setNewReferer] = useState();
 
-  const { activate, active, account } = useWeb3React();
+  const { activate, active, account, connector } = useWeb3React();
+  const [activatingConnector, setActivatingConnector] = React.useState();
+
+  // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
+  const triedEager = useEagerConnect();
+
+  // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
+  useInactiveListener(!triedEager || !!activatingConnector);
 
   useEffect(async () => {
+    if (activatingConnector && activatingConnector === connector) {
+      setActivatingConnector(undefined);
+    }
     if (active) {
       setWalletStatus("Connected👍");
       const balance = await updateBalance(account);
-      setBalance(balance);
+      setBalance(Web3.utils.fromWei(balance));
+      const referals = await totalReferals();
+      console.log(referals);
+      setReferrals(referals);
+      await referalEarnings();
     } else {
-      setWalletStatus("Coonect Wallet to Proceed⚛");
+      setWalletStatus("Connect Wallet to Proceed⚛");
     }
 
     setSplashIsOn(true);
     setTimeout(() => {
       setSplashIsOn(false);
     }, 2000);
-  }, [active, account]);
+  }, [active, , activatingConnector, connector, account]);
+
+  useEffect(() => {
+    setSplashIsOn(true);
+    setTimeout(() => {
+      setSplashIsOn(false);
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    if (router.query.referrer) {
+      setAcceptReferrerIsOn(true);
+    }
+  }, [router.query.referrer]);
 
   // handler functions
+
+  const acceptReferrerHandler = (e) => {
+    e.preventDefault(e);
+    setReferrerAddress(router.query.referrer);
+    setAcceptReferrerIsOn(false);
+  };
+
+  const amountInHandler = (e) => {
+    e.preventDefault(e);
+    setAmountIn(e.target.value);
+  };
 
   const connectWalletHandler = (e) => {
     e.preventDefault(e);
@@ -56,6 +115,65 @@ export default function Home() {
     ).methods
       .balanceOf(_address)
       .call();
+  };
+
+  const totalReferals = async () => {
+    const web3 = new Web3(window.ethereum);
+    const topic = [
+      "0x83819bdc988b1fce9e493fe39fff909311bd41a2f5671e45a4d7f5eab2d189a8",
+      null,
+      "0x" +
+        web3.utils.toChecksumAddress(account).split("0x")[1].padStart(64, "0"),
+    ];
+    const log = await web3.eth.getPastLogs({
+      fromBlock: 0,
+      toBlock: "latest",
+      address: address,
+      topics: topic,
+    });
+    console.log(log);
+    const referals = new Array();
+    for (let logs of log) {
+      referals.push(web3.eth.abi.decodeParameter("address", logs.topics[1]));
+    }
+
+    return referals;
+  };
+
+  const referalEarnings = async () => {
+    const web3 = new Web3(window.ethereum);
+    const totalReferal = await totalReferals();
+    for (let referals of totalReferal) {
+      const topic = [
+        "0x7845c0c799d070edb9490e691a9c91923603f6edd8061ccd8570cd83a86c1745",
+        "0x" +
+          web3.utils
+            .toChecksumAddress(account)
+            .split("0x")[1]
+            .padStart(64, "0"),
+        "0x" +
+          web3.utils
+            .toChecksumAddress(referals)
+            .split("0x")[1]
+            .padStart(64, "0"),
+      ];
+
+      const log = await web3.eth.getPastLogs({
+        fromBlock: 0,
+        toBlock: "latest",
+        address: address,
+        topics: topic,
+      });
+      console.log(log);
+
+      const referalRewards = new Array();
+      for (let logs of log) {
+        referalRewards =
+          referalRewards +
+          web3.utils.fromWei(web3.utils.hexToNumberString(logs.topics[3]));
+      }
+      setReferralEarnings(referalRewards);
+    }
   };
 
   const inviteHandler = (e) => {
@@ -108,7 +226,7 @@ export default function Home() {
       </icon>
       <blockcontent>
         <label>Auto-dividend earnings</label>
-        <p>0</p>
+        <p>{dividendEarnings}</p>
       </blockcontent>
     </block>
   );
@@ -154,16 +272,15 @@ export default function Home() {
       </icon>
       <blockcontent>
         <label>Referral earnings</label>
-        <p>0</p>
+        <p>{referralEarnings} BIKI</p>
       </blockcontent>
     </block>
   );
 
-  const totalEarnings = 90;
   const renderMyEarningsBlock = (
     <block className="row">
       <block>
-        <h2>{totalEarnings}</h2>
+        <h2>{dividendEarnings + referralEarnings}</h2>
         <h4>BNB Earned till now</h4>
       </block>
 
@@ -177,39 +294,111 @@ export default function Home() {
 
   const buyCoinFormContent = (
     <>
-      <input type="number" placeholder="enter BNB amount" />
+      <input
+        onChange={(e) => amountInHandler(e)}
+        value={amountIn}
+        type="number"
+        min={1}
+        placeholder="enter BNB amount"
+      />
       <label>You will get</label>
-      <h3>{"0"} DOGEX</h3>
-      <label>for 50 BNB</label>
+      <h3>{amountOut} DOGEX</h3>
+      <label>for {amountIn} BNB</label>
       <button>Buy</button>
     </>
   );
 
-  const refferalContent = (
-    <blockinput className="ref">
-      <icon>
-        <Image
-          src="/assets/icons/icon-address.svg"
-          alt="illustration"
-          width="14px"
-          height="14px"
-        />
-      </icon>
-      <p> A8BH..X8</p>
-      <icon onClick={(e) => copyHandler(e)}>
-        <Image
-          src="/assets/icons/icon-copy.svg"
-          alt="illustration"
-          width="14px"
-          height="14px"
-        />
-      </icon>
-    </blockinput>
-  );
+  const mapReferrals = referrals.map((referral, index) => {
+    return (
+      <blockinput className="ref" key={index}>
+        <icon>
+          <Image
+            src="/assets/icons/icon-address.svg"
+            alt="illustration"
+            width="14px"
+            height="14px"
+          />
+        </icon>
+        <p> {referral}</p>
+        <icon onClick={(e) => copyHandler(e)}>
+          <Image
+            src="/assets/icons/icon-copy.svg"
+            alt="illustration"
+            width="14px"
+            height="14px"
+          />
+        </icon>
+      </blockinput>
+    );
+  });
+
+  const refferalContent =
+    referrals.length !== 0 ? (
+      mapReferrals
+    ) : (
+      <label
+        style={{
+          marginTop: "130px",
+          alignSelf: "center",
+          justifySelf: "center",
+        }}
+      >
+        You havent reffered anyone yet.
+      </label>
+    );
+
+  const mapLeaders = leaders.map((leader, index) => {
+    return (
+      <div key={index}>
+        <blockinput className="ref">
+          <icon>
+            <Image
+              src="/assets/icons/icon-address.svg"
+              alt="illustration"
+              width="14px"
+              height="14px"
+            />
+          </icon>
+          <p> {leader.address}</p>
+          <icon onClick={(e) => copyHandler(e)}>
+            <Image
+              src="/assets/icons/icon-copy.svg"
+              alt="illustration"
+              width="14px"
+              height="14px"
+            />
+          </icon>
+        </blockinput>
+        <block style={{ marginTop: "12px" }} className="row">
+          <label>Earned | {leader.earnings} USD</label>
+          <label>Referrals | {leader.referrals}</label>
+        </block>
+      </div>
+    );
+  });
+
+  const leaderboardContent =
+    leaders.length !== 0 ? (
+      mapLeaders
+    ) : (
+      <label
+        style={{
+          marginTop: "130px",
+          alignSelf: "center",
+          justifySelf: "center",
+        }}
+      >
+        The winners will be announced shortly.
+      </label>
+    );
 
   const renderMain = (
     <contentmain>
-      <Card variant="referrals-card" content={refferalContent} />
+      <Card
+        variant="referrals-card"
+        content={refferalContent}
+        count={referrals?.length}
+      />
       <column>
         {renderMyEarningsBlock}
         <block className="row">
@@ -228,11 +417,14 @@ export default function Home() {
             You will be redirected to UNISWAP for buying DogeX
           </info>
         </block>
-        <Form label={"1 DogeX = 0.09 BNB"} content={buyCoinFormContent} />
+        <Form
+          label={`1 DogeX =${priceInBNB} BNB`}
+          content={buyCoinFormContent}
+        />
         {renderInviteBanner}
         {renderFeatureBanner}
       </column>
-      <Card variant="leaderboard-card" />
+      <Card variant="leaderboard-card" content={leaderboardContent} />
     </contentmain>
   );
 
@@ -272,23 +464,55 @@ export default function Home() {
 
   const switchReferrerPromptContent = (
     <>
-      <input placeholder="paste new referrer address here" />
-      <button>Switch referrer</button>
+      <input
+        placeholder="paste new referrer address here"
+        onChange={(e) => setNewReferer(e.target.value)}
+      />
+      <button
+        onClick={async () => {
+          return await new new Web3(window.ethereum).eth.Contract(
+            abi,
+            address
+          ).methods
+            .setReferer(newReferer)
+            .send({ from: window.ethereum.selectedAddress });
+        }}
+      >
+        Switch referrer
+      </button>
     </>
   );
 
+  const acceptReferrerPromptContent = (
+    <blockinput className="ref">
+      <icon>
+        <Image
+          src="/assets/icons/icon-referrer.svg"
+          alt="illustration"
+          width="14px"
+          height="14px"
+        />
+      </icon>
+      <p> {router.query.referrer}</p>
+      <button onClick={(e) => acceptReferrerHandler(e)}>Accept referrer</button>
+    </blockinput>
+  );
+
   const invitePromptContent = (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <blockinput className="ref">
         <icon>
           <Image
-            src="/assets/icons/icon-address.svg"
+            src="/assets/icons/icon-referrer.svg"
             alt="illustration"
             width="14px"
             height="14px"
           />
         </icon>
-        <p> A8BH..X8</p>
+        <p>
+          {" "}
+          {settings.application_base_url}/?referrer={account}
+        </p>
         <icon onClick={(e) => copyHandler(e)}>
           <Image
             src="/assets/icons/icon-copy.svg"
@@ -297,24 +521,35 @@ export default function Home() {
             height="14px"
           />
         </icon>
-      </blockinput>{" "}
+      </blockinput>
       <label style={{ color: "rgb(24, 177, 24)", fontSize: "10px" }}>
         Copy your link and invite friends via this link
       </label>
-    </>
+    </div>
   );
 
   const connectWalletPromptContent = (
     <>
       <icon>
         <Image
-          src="/assets/logos/logo-metamask.png"
-          alt="logo-metamask"
-          width="146px"
-          height="70px"
+          src="/assets/icons/icon-address.svg"
+          alt="illustration"
+          width="14px"
+          height="14px"
         />
       </icon>
-      <button>Connect now</button>
+      <p> A8BH..X8</p>
+      <icon onClick={(e) => copyHandler(e)}>
+        <Image
+          src="/assets/icons/icon-copy.svg"
+          alt="illustration"
+          width="14px"
+          height="14px"
+        />
+      </icon>
+      <label style={{ color: "rgb(24, 177, 24)", fontSize: "10px" }}>
+        Copy your link and invite friends via this link
+      </label>
     </>
   );
 
@@ -383,25 +618,29 @@ export default function Home() {
             switchReferrerIsOn ||
             connectWalletIsOn ||
             switchCoinIsOn ||
-            inviteIsOn
+            inviteIsOn ||
+            acceptReferrerIsOn
           }
           setIsOpen={
             (switchReferrerIsOn && setSwitchReferrerIsOn) ||
             (connectWalletIsOn && setConnectWalletIsOn) ||
             (switchCoinIsOn && setSwitchCoinIsOn) ||
-            (inviteIsOn && setInviteIsOn)
+            (inviteIsOn && setInviteIsOn) ||
+            (acceptReferrerIsOn && setAcceptReferrerIsOn)
           }
           title={
             (switchReferrerIsOn && "Switch Referrer") ||
             (connectWalletIsOn && "Select a wallet") ||
             (switchCoinIsOn && "Feature under construction") ||
-            (inviteIsOn && "Your invite link")
+            (inviteIsOn && "Your invite link") ||
+            (acceptReferrerIsOn && "Accept referrer")
           }
           content={
             (switchReferrerIsOn && switchReferrerPromptContent) ||
             (connectWalletIsOn && connectWalletPromptContent) ||
             (switchCoinIsOn && switchCoinPromptContent) ||
-            (inviteIsOn && invitePromptContent)
+            (inviteIsOn && invitePromptContent) ||
+            (acceptReferrerIsOn && acceptReferrerPromptContent)
           }
         />
       </content>

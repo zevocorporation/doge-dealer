@@ -7,14 +7,14 @@ import { abi, address } from "../utils/constants";
 const Block = ({ variant, logo, title, content, isLoggedIn }) => {
   const [Referrer, setReferer] = useState();
 
-  const { active, account } = useWeb3React();
+  const { active, account, chainId } = useWeb3React();
 
   useEffect(async () => {
     if (active) {
       const referrer = await updateReferer(account);
       setReferer(referrer);
     }
-  }, [active]);
+  }, [active, account, chainId]);
 
   const updateReferer = async (_address) => {
     return await new new Web3(window.ethereum).eth.Contract(
