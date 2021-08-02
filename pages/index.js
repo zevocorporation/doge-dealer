@@ -262,7 +262,7 @@ export default function Home() {
   );
 
   const renderAutoDividendEarningsBlock = (
-    <block>
+    <block className="block_two">
       <icon>
         <Image
           src="/assets/icons/icon-balance.svg"
@@ -308,7 +308,7 @@ export default function Home() {
   );
 
   const renderReferralEarningBlock = (
-    <block>
+    <block className="block_three">
       <icon>
         <Image
           src="/assets/icons/icon-balance.svg"
@@ -325,15 +325,18 @@ export default function Home() {
   );
 
   const renderMyEarningsBlock = (
-    <block className="row">
-      <block>
+    <block className="earnings_row">
+      <block className="block_one">
         <h2>{dividendEarnings + referralEarnings}</h2>
         <h4>BNB Earned till now</h4>
       </block>
 
       {renderAutoDividendEarningsBlock}
       {renderReferralEarningBlock}
-      <button onClick={(e) => switchCoinHandler(e)} className="button-mini">
+      <button
+        onClick={(e) => switchCoinHandler(e)}
+        className="button-mini block_four"
+      >
         switch coin
       </button>
     </block>

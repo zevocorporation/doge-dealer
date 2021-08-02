@@ -364,7 +364,8 @@ column {
   flex-direction: column;
 }
 
-.row {
+.row,
+.earnings_row {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -417,6 +418,22 @@ toast > label {
 
 .hamburger > div {
   cursor: pointer;
+}
+
+.block_one {
+  grid-area: block_one;
+}
+
+.block_two {
+  grid-area: block_two;
+}
+
+.block_three {
+  grid-area: block_three;
+}
+
+.block_four {
+  grid-area: block_four;
 }
 
 @media (max-width: 992px) {
@@ -480,6 +497,14 @@ toast > label {
     flex-direction: column;
     margin-bottom: 1em;
     grid-gap: 10px;
+  }
+
+  .earnings_row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "block_one block_four"
+      "block_two block_three";
   }
 
   banner {
