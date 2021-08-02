@@ -63,10 +63,11 @@ export default function Home() {
       setWalletStatus("Connected👍");
       const balance = await updateBalance(account);
       setBalance(Web3.utils.fromWei(balance));
-      const referals = await totalReferals();
+      const referals = await totalReferals(account);
       console.log(referals);
       setReferrals(referals);
       await referalEarnings();
+      await leaderBoard();
     } else {
       setWalletStatus("Connect Wallet to Proceed⚛");
     }
@@ -117,13 +118,13 @@ export default function Home() {
       .call();
   };
 
-  const totalReferals = async () => {
+  const totalReferals = async (_address) => {
     const web3 = new Web3(window.ethereum);
     const topic = [
       "0x83819bdc988b1fce9e493fe39fff909311bd41a2f5671e45a4d7f5eab2d189a8",
       null,
       "0x" +
-        web3.utils.toChecksumAddress(account).split("0x")[1].padStart(64, "0"),
+        web3.utils.toChecksumAddress(_address).split("0x")[1].padStart(64, "0"),
     ];
     const log = await web3.eth.getPastLogs({
       fromBlock: 0,
@@ -140,9 +141,51 @@ export default function Home() {
     return referals;
   };
 
+  const sortTop = (info) => {
+    const size = 10;
+    const refs = info.slice(0, size).map((i) => {
+      return i;
+    });
+    return refs;
+  };
+
+  const leaderBoard = async () => {
+    const web3 = new Web3(window.ethereum);
+    const topic = [
+      "0x83819bdc988b1fce9e493fe39fff909311bd41a2f5671e45a4d7f5eab2d189a8",
+      null,
+      null,
+    ];
+    const log = await web3.eth.getPastLogs({
+      fromBlock: 0,
+      toBlock: "latest",
+      address: address,
+      topics: topic,
+    });
+
+    const referers = new Array();
+
+    for (let logs of log) {
+      referers.push(web3.eth.abi.decodeParameter("address", logs.topics[2]));
+    }
+
+    const info = new Array();
+
+    if (referers != undefined) {
+      for (let totalreferers of referers) {
+        console.log(totalreferers);
+        const totalReferers = await totalReferals(totalreferers);
+        const totalreferal = totalReferers.length;
+        info.push({ address: totalreferers, referrals: totalreferal });
+      }
+    }
+    setLeaders(sortTop(info));
+    console.log(sortTop(info));
+  };
+
   const referalEarnings = async () => {
     const web3 = new Web3(window.ethereum);
-    const totalReferal = await totalReferals();
+    const totalReferal = await totalReferals(account);
     for (let referals of totalReferal) {
       const topic = [
         "0x7845c0c799d070edb9490e691a9c91923603f6edd8061ccd8570cd83a86c1745",
