@@ -18,6 +18,7 @@ import { seo, settings } from "../data";
 import { useWeb3React, Web3ReactProvider } from "@web3-react/core";
 import { injected } from "../utils/connectors";
 import Web3 from "web3";
+import Modal from "../patterns/Modal";
 
 const getFlooredFixed = (v, d) => {
   return (Math.floor(v * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d);
@@ -33,6 +34,9 @@ export default function Home() {
   const [acceptReferrerIsOn, setAcceptReferrerIsOn] = useState(false);
   const [connectWalletIsOn, setConnectWalletIsOn] = useState(false);
   const [toastIsOn, setToastIsOn] = useState(false);
+  const [isWrongNetwork, setIsWrongNetwork] = useState(false);
+  const [isMetamask, setIsMetamask] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
   const [price, setPrice] = useState();
 
   //const [address, setAddress] = useState("not connected");
@@ -760,9 +764,31 @@ export default function Home() {
             }
           />
         </content>
-
         <Footer />
       </div>
+      {isConnected && (
+        <Modal
+          title="Connect your wallet"
+          connect={true}
+          activate={activate}
+          setIsModal={setIsConnected}
+        />
+      )}
+      {isWrongNetwork && (
+        <Modal
+          title="WrongNetwork"
+          content="Please connect to Goering test net"
+          setIsModal={setIsWrongNetwork}
+        />
+      )}
+      {isMetamask && (
+        <Modal
+          title="Install metamask"
+          inValid={true}
+          content="Install metamask extension from your browser to proceed further"
+          setIsModal={setIsMetamask}
+        />
+      )}
     </>
   );
 }
