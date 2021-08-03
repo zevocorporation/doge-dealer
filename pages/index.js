@@ -76,7 +76,7 @@ export default function Home() {
       await leaderBoard();
       getPriceofBiki();
     } else {
-      setWalletStatus("Connect Wallet to Proceed⚛");
+      setWalletStatus("Connect Wallet ⚛");
     }
 
     setSplashIsOn(true);
@@ -489,29 +489,18 @@ export default function Home() {
         count={referrals?.length}
       />
       <column>
-        {renderMyEarningsBlock}
-        <block className="row">
-          <h3>Stake DogeX and start earning BNB / DOGE</h3>
-          <info>
-            <span>
-              <icon>
-                <Image
-                  alt="info"
-                  src="/assets/icons/icon-asterisk.svg"
-                  height="10px"
-                  width="10px"
-                />
-              </icon>
-            </span>
-            You will be redirected to UNISWAP for buying DogeX
-          </info>
-        </block>
-        <Form
-          label={`1 DogeX =${priceInBNB} BNB`}
-          content={buyCoinFormContent}
-        />
-        {renderInviteBanner}
-        {renderFeatureBanner}
+        <div className="form_header">
+          <div>
+            <h3 style={{ marginBottom: 16 }}>
+              Stake DogeX and start earning BNB / DOGE
+            </h3>
+            <info>You will be redirected to UNISWAP for buying DogeX</info>
+          </div>
+          <div></div>
+        </div>
+        <Form />
+        {/* {renderInviteBanner}
+        {renderFeatureBanner} */}
       </column>
       <Card variant="leaderboard-card" content={leaderboardContent} />
     </contentmain>
@@ -651,48 +640,6 @@ export default function Home() {
 
   const headerContent = (
     <>
-      <div className="header_routes">
-        <Block />
-        <button
-          onClick={(e) => switchReferrerHandler(e)}
-          className="button-mini"
-        >
-          Switch referrer
-        </button>
-      </div>
-      <div className="header_routes">
-        <blockinput>
-          <icon>
-            <Image
-              src="/assets/icons/icon-address.svg"
-              alt="illustration"
-              width="24px"
-              height="24px"
-              layout="fixed"
-              objectFit="contain"
-            />
-          </icon>
-          <blockinputcontent>
-            <label>My address</label>
-            {account && (
-              <p>{`${account?.slice(0, 6)}...${account?.slice(
-                account?.length - 6
-              )}`}</p>
-            )}
-          </blockinputcontent>
-          <icon onClick={(e) => copyHandler(e)}>
-            <Image
-              src="/assets/icons/icon-copy.svg"
-              alt="illustration"
-              width="14px"
-              height="14px"
-              layout="fixed"
-              objectFit="contain"
-            />
-          </icon>
-        </blockinput>
-        {renderBalanceBlock}
-      </div>
       <button onClick={() => activate(injected)}>{WalletStatus}</button>
     </>
   );
@@ -704,52 +651,54 @@ export default function Home() {
   );
 
   return (
-    <div className={styles.container}>
-      {toastIsOn && renderCopiedToast}
-      {renderseo}
-      {splashIsOn && renderSplash}
-      <Header
-        logo={settings.application_logo_path}
-        title={settings.application_name}
-        content={headerContent}
-        isLoggedIn={false}
-      />
-
-      <content>
-        {renderMain}
-        <Prompt
-          isOpen={
-            switchReferrerIsOn ||
-            connectWalletIsOn ||
-            switchCoinIsOn ||
-            inviteIsOn ||
-            acceptReferrerIsOn
-          }
-          setIsOpen={
-            (switchReferrerIsOn && setSwitchReferrerIsOn) ||
-            (connectWalletIsOn && setConnectWalletIsOn) ||
-            (switchCoinIsOn && setSwitchCoinIsOn) ||
-            (inviteIsOn && setInviteIsOn) ||
-            (acceptReferrerIsOn && setAcceptReferrerIsOn)
-          }
-          title={
-            (switchReferrerIsOn && "Switch Referrer") ||
-            (connectWalletIsOn && "Select a wallet") ||
-            (switchCoinIsOn && "Feature under construction") ||
-            (inviteIsOn && "Your invite link") ||
-            (acceptReferrerIsOn && "Accept referrer")
-          }
-          content={
-            (switchReferrerIsOn && switchReferrerPromptContent) ||
-            (connectWalletIsOn && connectWalletPromptContent) ||
-            (switchCoinIsOn && switchCoinPromptContent) ||
-            (inviteIsOn && invitePromptContent) ||
-            (acceptReferrerIsOn && acceptReferrerPromptContent)
-          }
+    <>
+      <div className={styles.container}>
+        {toastIsOn && renderCopiedToast}
+        {renderseo}
+        {splashIsOn && renderSplash}
+        <Header
+          logo={settings.application_logo_path}
+          title={settings.application_name}
+          content={headerContent}
+          isLoggedIn={false}
         />
-      </content>
 
-      <Footer />
-    </div>
+        <content>
+          {renderMain}
+          <Prompt
+            isOpen={
+              switchReferrerIsOn ||
+              connectWalletIsOn ||
+              switchCoinIsOn ||
+              inviteIsOn ||
+              acceptReferrerIsOn
+            }
+            setIsOpen={
+              (switchReferrerIsOn && setSwitchReferrerIsOn) ||
+              (connectWalletIsOn && setConnectWalletIsOn) ||
+              (switchCoinIsOn && setSwitchCoinIsOn) ||
+              (inviteIsOn && setInviteIsOn) ||
+              (acceptReferrerIsOn && setAcceptReferrerIsOn)
+            }
+            title={
+              (switchReferrerIsOn && "Switch Referrer") ||
+              (connectWalletIsOn && "Select a wallet") ||
+              (switchCoinIsOn && "Feature under construction") ||
+              (inviteIsOn && "Your invite link") ||
+              (acceptReferrerIsOn && "Accept referrer")
+            }
+            content={
+              (switchReferrerIsOn && switchReferrerPromptContent) ||
+              (connectWalletIsOn && connectWalletPromptContent) ||
+              (switchCoinIsOn && switchCoinPromptContent) ||
+              (inviteIsOn && invitePromptContent) ||
+              (acceptReferrerIsOn && acceptReferrerPromptContent)
+            }
+          />
+        </content>
+
+        <Footer />
+      </div>
+    </>
   );
 }

@@ -10,6 +10,7 @@ body {
   -moz-box-sizing: border-box; /* Firefox, other Gecko */
   box-sizing: border-box; /* Opera/IE 8+ */
   overflow-x: hidden;
+  color: whitesmoke;
 }
 
 a {
@@ -31,13 +32,14 @@ p {
 
 h2 {
   color: #ff8a00;
+  margin: unset;
 }
 
 h3,
 h4 {
   color: whitesmoke;
   font-weight: 100;
-  /* margin: 22px 0px; */
+  margin: unset;
 }
 
 h4 {
@@ -82,6 +84,13 @@ button {
   outline: none;
   padding: 0px 32px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1em;
+  border-radius: 16px;
+  letter-spacing: 0.03em;
 }
 
 button:hover {
@@ -113,28 +122,36 @@ button:active {
 /* input stylings */
 
 input {
-  background-color: #2e2e2e;
   color: white;
   height: 38px;
   border: none;
   outline: none;
   padding: 0px 16px;
+  background: transparent;
+  font-size: 1em;
 }
 
-input:focus {
-  outline: black;
+input::placeholder {
+  font-size: 1em;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  display: none;
+}
+
+/* Header Stylings */
 
 header {
-  display: flex;
   top: 0;
   left: 0;
   position: fixed;
   gap: 32px;
-  justify-content: space-between;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: #262626;
-  height: 15vh;
+  height: 65px;
   width: 100%;
   padding: 0px 32px;
 }
@@ -142,7 +159,7 @@ header {
 /* container styling */
 
 content {
-  margin-top: 20vh;
+  margin-top: calc(65px + 2em);
   width: 100%;
   height: auto;
   justify-content: space-around;
@@ -170,6 +187,7 @@ card {
   background-color: #262626;
   border-radius: 5px;
   padding: 16px;
+  min-width: 250px;
 }
 
 cardheader {
@@ -223,24 +241,35 @@ blockinput {
 
 form {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   gap: 16px;
   background-color: #262626;
   border-radius: 5px;
   padding: 16px;
 }
 
-formcontent {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.form_header {
+  background: #262626;
+  padding: 12px 16px;
+  border-radius: 16px;
 }
 
-formheader {
+.form_control {
+  background: #222222;
+  padding: 12px 16px;
+  border-radius: 16px;
+}
+
+.form_control > div {
   display: flex;
-  gap: 32px;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+}
+
+.form_control > div > input {
+  width: 100%;
+  margin-right: 1em;
+  font-size: 1em;
 }
 
 banner {
@@ -356,6 +385,8 @@ logo {
 }
 
 column {
+  max-width: 440px;
+  width: 100%;
   grid-area: columnarea;
   display: flex;
   flex-direction: column;
@@ -384,29 +415,17 @@ column {
 
 toast {
   background-color: white;
-  position: absolute;
-  top: 16vh;
-  right: 0;
-  margin-right: 32px;
+  position: fixed;
+  bottom: 2em;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 3;
-  padding: 16px;
+  padding: 10px 16px;
   box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 toast > label {
   color: rgb(39, 175, 39);
-}
-
-.header_routes {
-  display: flex;
-  align-items: center;
-  grid-gap: 2em;
-}
-
-.header_content {
-  display: flex;
-  align-items: center;
-  grid-gap: 2em;
 }
 
 .hamburger {
@@ -436,54 +455,22 @@ toast > label {
 @media (max-width: 992px) {
   contentmain {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+    grid-gap: 2em;
+    place-items: center;
     grid-template-areas:
-      "columnarea columnarea"
-      "refferal leaderboard";
+      "columnarea"
+      "refferal"
+      "leaderboard";
+  }
+
+  card {
+    max-width: 440px;
+    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
-  header {
-    align-items: flex-start;
-    flex-direction: column;
-    height: auto;
-    position: static;
-    padding: 10px 32px;
-    grid-gap: 1em;
-  }
-
-  .header_content {
-    flex-direction: column;
-    display: none;
-    width: 100%;
-    grid-gap: 1em;
-  }
-
-  .header_content.active {
-    display: flex;
-  }
-
-  .hamburger {
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-  }
-
-  content {
-    margin-top: 1em;
-  }
-
-  .header_routes {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  block {
-    justify-content: unset;
-  }
-
   .card_row {
     justify-content: space-between;
   }
@@ -496,48 +483,10 @@ toast > label {
     grid-gap: 10px;
   }
 
-  .earnings_row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "block_one block_four"
-      "block_two block_three";
-  }
-
-  banner {
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    grid-gap: 10px;
-  }
-
-  .mini-banner {
-    height: auto;
-  }
-
-  formheader {
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    grid-gap: 10px;
+  header h3 {
+    display: none;
   }
 }
 
 @media (max-width: 576px) {
-  contentmain {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "columnarea"
-      "refferal"
-      "leaderboard";
-  }
-
-  button {
-    width: 100%;
-  }
-
-  blockinput {
-    padding: 12px 1em;
-  }
 }
