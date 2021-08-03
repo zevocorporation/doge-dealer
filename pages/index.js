@@ -5,6 +5,7 @@ import styles from "../styles/Home.module.css";
 import { abi, address } from "../utils/constants";
 import { useEagerConnect, useInactiveListener } from "../utils/hooks.ts";
 import { Fetcher, WETH, Token, Route } from "@uniswap/sdk";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import { useRouter } from "next/router";
 //import patterns
@@ -408,15 +409,22 @@ export default function Home() {
             height="14px"
           />
         </icon>
-        <p> {referral}</p>
-        <icon onClick={(e) => copyHandler(e)}>
-          <Image
-            src="/assets/icons/icon-copy.svg"
-            alt="illustration"
-            width="14px"
-            height="14px"
-          />
-        </icon>
+        <p>
+          1
+          {/* {`${referral?.address?.slice(0, 6)}...${referral?.address?.slice(
+              referral?.address?.length - 6
+            )}`} */}
+        </p>
+        <CopyToClipboard text={referral}>
+          <icon onClick={(e) => copyHandler(e)}>
+            <Image
+              src="/assets/icons/icon-copy.svg"
+              alt="illustration"
+              width="14px"
+              height="14px"
+            />
+          </icon>
+        </CopyToClipboard>
       </blockinput>
     );
   });
@@ -448,15 +456,21 @@ export default function Home() {
               height="14px"
             />
           </icon>
-          <p> {leader.address}</p>
-          <icon onClick={(e) => copyHandler(e)}>
-            <Image
-              src="/assets/icons/icon-copy.svg"
-              alt="illustration"
-              width="14px"
-              height="14px"
-            />
-          </icon>
+          <p>
+            {`${leader?.address?.slice(0, 6)}...${leader?.address?.slice(
+              leader?.address?.length - 6
+            )}`}
+          </p>
+          <CopyToClipboard text={leader?.address}>
+            <icon onClick={(e) => copyHandler(e)}>
+              <Image
+                src="/assets/icons/icon-copy.svg"
+                alt="illustration"
+                width="14px"
+                height="14px"
+              />
+            </icon>
+          </CopyToClipboard>
         </blockinput>
         <block style={{ marginTop: "12px" }} className="card_row">
           <label>Earned | {leader.earnings} USD</label>
@@ -498,9 +512,7 @@ export default function Home() {
           </div>
           <div></div>
         </div>
-        <Form />
-        {/* {renderInviteBanner}
-        {renderFeatureBanner} */}
+        <Form address={address} />
       </column>
       <Card variant="leaderboard-card" content={leaderboardContent} />
     </contentmain>
@@ -644,6 +656,46 @@ export default function Home() {
     </>
   );
 
+  const renderUserDetails = (
+    <div className="user_details">
+      <Block />
+      <button onClick={(e) => switchReferrerHandler(e)} className="button-mini">
+        Switch referrer
+      </button>
+      <blockinput>
+        <icon>
+          <Image
+            src="/assets/icons/icon-address.svg"
+            alt="illustration"
+            width="24px"
+            height="24px"
+            layout="fixed"
+            objectFit="contain"
+          />
+        </icon>
+        <blockinputcontent>
+          <label>My address</label>
+          {account && (
+            <p>{`${account?.slice(0, 6)}...${account?.slice(
+              account?.length - 6
+            )}`}</p>
+          )}
+        </blockinputcontent>
+        <icon onClick={(e) => copyHandler(e)}>
+          <Image
+            src="/assets/icons/icon-copy.svg"
+            alt="illustration"
+            width="14px"
+            height="14px"
+            layout="fixed"
+            objectFit="contain"
+          />
+        </icon>
+      </blockinput>
+      {renderBalanceBlock}
+    </div>
+  );
+
   const renderCopiedToast = (
     <toast>
       <label>copied address</label>
@@ -662,9 +714,11 @@ export default function Home() {
           content={headerContent}
           isLoggedIn={false}
         />
-
+        {renderUserDetails}
         <content>
           {renderMain}
+          {renderInviteBanner}
+          {renderFeatureBanner}
           <Prompt
             isOpen={
               switchReferrerIsOn ||
