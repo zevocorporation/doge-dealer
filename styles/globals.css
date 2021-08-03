@@ -103,20 +103,12 @@ button:active {
 }
 
 .button-mini {
-  background-color: #d7d7d7;
-  color: #ff8a00;
+  background-color: #ff8a00;
+  color: #fff;
   font-size: 12px;
   padding: 4px 16px;
   height: auto;
-}
-
-.button-mini:hover {
-  background-color: #323232c7;
-  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.button-mini:active {
-  background-color: #222222;
+  font-weight: normal;
 }
 
 /* input stylings */
@@ -165,7 +157,7 @@ content {
 }
 
 contentmain {
-  margin-top: 2em;
+  margin-top: 1em;
   display: flex;
   grid-auto-flow: column;
   grid-gap: 16px;
@@ -175,12 +167,14 @@ contentmain {
 }
 
 .user_details {
+  width: 100%;
   margin-top: calc(65px + 1em);
   padding: 1em 2em;
   display: flex;
   align-items: center;
   justify-content: space-between;
   grid-gap: 1em;
+  background: #fff;
 }
 
 /* card styling */
@@ -212,6 +206,7 @@ cardcontent {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  height: 90%;
 }
 
 count {
@@ -293,16 +288,18 @@ form {
 }
 
 banner {
-  max-width: 800px;
+  max-width: 440px;
   width: 100%;
   margin: 0 auto;
   display: flex;
-  padding: 4px 32px;
   background-color: #ff9c2b;
-  align-items: center;
-  justify-content: space-between;
   border-radius: 0px 0px 5px 5px;
   text-align: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  grid-gap: 1em;
+  padding: 10px 2em;
 }
 
 .mini-banner {
@@ -339,7 +336,7 @@ backdrop {
   align-items: center;
   justify-content: center;
   position: fixed;
-  background-color: rgba(22, 22, 22, 0.93);
+  background-color: rgba(0, 0, 0, 0.2);
   width: 100%;
   height: 100%;
   top: 0;
@@ -351,26 +348,30 @@ backdrop {
 }
 
 prompt {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1200;
   display: flex;
   flex-direction: column;
-  background-color: #202020;
-  padding: 32px;
-  justify-content: space-between;
-  align-content: space-between;
-  gap: 32px;
+  background-color: #fff;
+  padding: 1.5em;
+  grid-gap: 1.5em;
 }
 
 promptheader {
   display: flex;
   justify-content: space-between;
-  align-content: space-between;
+  align-items: center;
 }
 
 promptcontent {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  grid-gap: 16px;
+  gap: 1em;
 }
 
 icon {
@@ -379,18 +380,20 @@ icon {
 
 splash {
   background: url("/assets/splash/splash.png");
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: none;
+  color: #ff9c2b;
 }
 
 splashcontent {
-  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -411,6 +414,13 @@ column {
   grid-area: columnarea;
   display: flex;
   flex-direction: column;
+}
+
+.flex_gap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  grid-gap: 2em;
 }
 
 .row,
@@ -494,15 +504,6 @@ toast > label {
 @media (max-width: 768px) {
   .card_row {
     justify-content: space-between;
-  }
-
-  banner {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    grid-gap: 1em;
-    max-width: 80%;
-    padding: 10px 2em;
   }
 
   .row {

@@ -4,7 +4,14 @@ import React, { useEffect, useState } from "react";
 import Web3 from "web3";
 import { abi, address } from "../utils/constants";
 
-const Block = ({ variant, logo, title, content, isLoggedIn }) => {
+const Block = ({
+  variant,
+  logo,
+  title,
+  content,
+  isLoggedIn,
+  switchReferrerHandler,
+}) => {
   const [Referrer, setReferer] = useState();
 
   const { active, account, chainId } = useWeb3React();
@@ -26,24 +33,34 @@ const Block = ({ variant, logo, title, content, isLoggedIn }) => {
   };
 
   const renderDefaultBlock = (
-    <block>
-      <icon>
-        <Image
-          src="/assets/icons/icon-referrer.svg"
-          alt="illustration"
-          width="24px"
-          height="24px"
-        />
-      </icon>
-      <blockcontent>
-        <label>Referrer address</label>
-        {Referrer && (
-          <p>{`${Referrer?.slice(0, 6)}...${Referrer?.slice(
-            Referrer?.length - 6
-          )}`}</p>
-        )}
-      </blockcontent>
-    </block>
+    <>
+      <block>
+        <icon>
+          <Image
+            src="/assets/icons/icon-referrer.svg"
+            alt="illustration"
+            width="24px"
+            height="24px"
+          />
+        </icon>
+        <blockcontent>
+          <label>Referrer address</label>
+          {Referrer && (
+            <p>{`${Referrer?.slice(0, 6)}...${Referrer?.slice(
+              Referrer?.length - 6
+            )}`}</p>
+          )}
+        </blockcontent>
+      </block>
+      {!Referrer && (
+        <button
+          onClick={(e) => switchReferrerHandler(e)}
+          className="button-mini"
+        >
+          Add referrer
+        </button>
+      )}
+    </>
   );
 
   return !variant && renderDefaultBlock;

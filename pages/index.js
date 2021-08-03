@@ -44,7 +44,7 @@ export default function Home() {
 
   const [amountOut, setAmountOut] = useState("--");
 
-  const [referrals, setReferrals] = useState([1, 2]);
+  const [referrals, setReferrals] = useState([]);
   const [leaders, setLeaders] = useState([
     { address: "JH87SHV..HI", referrals: 23, earnings: 59 },
     { address: "87SHS9V..I4", referrals: 3, earnings: 509 },
@@ -68,7 +68,7 @@ export default function Home() {
       setActivatingConnector(undefined);
     }
     if (active) {
-      setWalletStatus("Connected👍");
+      setWalletStatus("Connected");
       const balance = await updateBalance(account);
       setBalance(Web3.utils.fromWei(balance));
       const referals = await totalReferals(account);
@@ -365,12 +365,6 @@ export default function Home() {
 
       {renderAutoDividendEarningsBlock}
       {renderReferralEarningBlock}
-      <button
-        onClick={(e) => switchCoinHandler(e)}
-        className="button-mini block_four"
-      >
-        switch coin
-      </button>
     </block>
   );
 
@@ -433,15 +427,16 @@ export default function Home() {
     referrals.length !== 0 ? (
       mapReferrals
     ) : (
-      <label
+      <div
         style={{
-          marginTop: "130px",
-          alignSelf: "center",
-          justifySelf: "center",
+          textAlign: "center",
+          height: "inherit",
+          display: "grid",
+          placeItems: "center",
         }}
       >
-        You havent reffered anyone yet.
-      </label>
+        You haven't reffered anyone yet.
+      </div>
     );
 
   const mapLeaders = leaders.map((leader, index) => {
@@ -508,11 +503,24 @@ export default function Home() {
             <h3 style={{ marginBottom: 16 }}>
               Stake DogeX and start earning BNB / DOGE
             </h3>
-            <info>You will be redirected to UNISWAP for buying DogeX</info>
+            <div className="flex_gap">
+              <info>You will be redirected to UNISWAP for buying DogeX</info>
+              <button
+                onClick={(e) => switchCoinHandler(e)}
+                className="button-mini"
+              >
+                switch coin
+              </button>
+            </div>
           </div>
           <div></div>
         </div>
-        <Form address={address} />
+        <Form
+          address={address}
+          amountIn={amountIn}
+          amountInHandler={amountInHandler}
+          amountOut={amountOut}
+        />
       </column>
       <Card variant="leaderboard-card" content={leaderboardContent} />
     </contentmain>
@@ -568,7 +576,7 @@ export default function Home() {
             .send({ from: window.ethereum.selectedAddress });
         }}
       >
-        Switch referrer
+        Add referrer
       </button>
     </>
   );
@@ -600,17 +608,20 @@ export default function Home() {
           />
         </icon>
         <p>
-          {" "}
           {settings.application_base_url}/?referrer={account}
         </p>
-        <icon onClick={(e) => copyHandler(e, "url")}>
-          <Image
-            src="/assets/icons/icon-copy.svg"
-            alt="illustration"
-            width="14px"
-            height="14px"
-          />
-        </icon>
+        <CopyToClipboard
+          text={`${settings.application_base_url}/?referrer=${account}`}
+        >
+          <icon onClick={(e) => copyHandler(e, "url")}>
+            <Image
+              src="/assets/icons/icon-copy.svg"
+              alt="illustration"
+              width="14px"
+              height="14px"
+            />
+          </icon>
+        </CopyToClipboard>
       </blockinput>
       <label style={{ color: "rgb(24, 177, 24)", fontSize: "10px" }}>
         Copy your link and invite friends via this link
@@ -658,10 +669,7 @@ export default function Home() {
 
   const renderUserDetails = (
     <div className="user_details">
-      <Block />
-      <button onClick={(e) => switchReferrerHandler(e)} className="button-mini">
-        Switch referrer
-      </button>
+      <Block switchReferrerHandler={switchReferrerHandler} />
       <blockinput>
         <icon>
           <Image
@@ -681,16 +689,18 @@ export default function Home() {
             )}`}</p>
           )}
         </blockinputcontent>
-        <icon onClick={(e) => copyHandler(e)}>
-          <Image
-            src="/assets/icons/icon-copy.svg"
-            alt="illustration"
-            width="14px"
-            height="14px"
-            layout="fixed"
-            objectFit="contain"
-          />
-        </icon>
+        <CopyToClipboard text={account}>
+          <icon onClick={(e) => copyHandler(e)}>
+            <Image
+              src="/assets/icons/icon-copy.svg"
+              alt="illustration"
+              width="14px"
+              height="14px"
+              layout="fixed"
+              objectFit="contain"
+            />
+          </icon>
+        </CopyToClipboard>
       </blockinput>
       {renderBalanceBlock}
     </div>
@@ -704,10 +714,10 @@ export default function Home() {
 
   return (
     <>
+      {splashIsOn && renderSplash}
       <div className={styles.container}>
         {toastIsOn && renderCopiedToast}
         {renderseo}
-        {splashIsOn && renderSplash}
         <Header
           logo={settings.application_logo_path}
           title={settings.application_name}
