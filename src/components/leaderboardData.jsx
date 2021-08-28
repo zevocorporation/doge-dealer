@@ -14,29 +14,54 @@ import HashLinks from "./hashLinks";
 //IMPORTING MEDIA ASSETS
 
 import dogeSmall from "../assets/icons/dogeSmall.svg";
+import logo from "../assets/logos/logo.png";
 import axios from "axios";
+import loader from "../assets/icons/loader.gif";
 
-function LeaderboardData({ title, value }) {
+function LeaderboardData({ title, value, variant, getReferalCount }) {
   const [data, setData] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     handleReferrer();
   }, []);
 
   const handleReferrer = async () => {
-    try {
-      const {
-        data: { result },
-      } = await axios.get(
-        `https://app.dogedealercoin.com/server/getReferrals/${value.leader}`
-      );
+    if (variant === "alltime") {
+      setIsLoading(true);
+      setData(await getReferalCount(value.leader));
+      setIsLoading(false);
+    } else {
+      try {
+        setIsLoading(true);
 
-      // const {
-      //   data: { result },
-      // } = await axios.get(`http://localhost:5000/getReferrals/${value.leader}`);
-      setData(result);
-    } catch (error) {
-      console.log(error);
+        // const {
+        //   data: { result },
+        // } = await axios.get(
+        //   `https://api.dogedealercoin.com/server_app/getReferrals/${value.leader}`
+        // );
+
+        const {
+          data: {
+            result: { DailyReferral, WeeklyReferral, MonthlyReferral },
+          },
+        } = await axios.get(
+          `http://localhost:5000/getReferrals/${value.leader}`
+        );
+        console.log(
+          value.leader,
+          DailyReferral,
+          WeeklyReferral,
+          MonthlyReferral
+        );
+        if (variant === "monthly") setData(MonthlyReferral);
+        else if (variant === "weekly") setData(WeeklyReferral);
+        else setData(DailyReferral);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -49,19 +74,23 @@ function LeaderboardData({ title, value }) {
       <div>
         <div>
           <p className="text_accent_primary_22">
-            {/* <CountUp end={value.earn} separator="," decimals={2} /> */}
             {value.earn > 999
               ? numFormatter(value.earn)
-              : value.earn?.toFixed(2)}
+              : parseFloat(value.earn)?.toFixed(2)}
           </p>
           <p className="leaderDoge">
-            <img src={dogeSmall} alt="doge" />
-            <span className="text_accent_primary_687">DOGE</span>
+            <img src={logo} alt="doge" width={20} />
           </p>
           <p className="text_accent_primary_14R">EARNED</p>
         </div>
         <div>
-          <p className="text_accent_primary_22">{numFormatter(data)}</p>
+          <p className="text_accent_primary_22">
+            {isLoading ? (
+              <img src={loader} alt="loader" width={16} />
+            ) : (
+              numFormatter(data)
+            )}
+          </p>
           <p className="text_accent_primary_11R">Referrals</p>
           <p className="text_accent_primary_14R">COMPLETED</p>
         </div>
