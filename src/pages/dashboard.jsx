@@ -106,8 +106,9 @@ const Dashboard = () => {
     decimal: 18,
   };
 
-  const getReferalCount = async () => {
-    var bal = await contract.methods.getReferralCount(account).call();
+  const getReferalCount = async (value) => {
+    var acc = value || account;
+    var bal = await contract.methods.getReferralCount(acc).call();
     return bal;
   };
 
@@ -223,13 +224,13 @@ const Dashboard = () => {
   const handleLeaderboardData = async () => {
     setIsLoading(true);
     try {
-      const {
-        data: { allTimeRewards, monthlyRewards, weeklyRewards, dailyRewards },
-      } = await axios.get("https://app.dogedealercoin.com/server/getAll");
-
       // const {
       //   data: { allTimeRewards, monthlyRewards, weeklyRewards, dailyRewards },
-      // } = await axios.get("http://localhost:5000/getAll");
+      // } = await axios.get("https://api.dogedealercoin.com/server_app/getAll");
+
+      const {
+        data: { allTimeRewards, monthlyRewards, weeklyRewards, dailyRewards },
+      } = await axios.get("http://localhost:5000/getAll");
       setAllTimeLeaderboard(allTimeRewards);
       setDailyLeaderboard(dailyRewards);
       setWeeklyLeaderboard(weeklyRewards);
@@ -701,6 +702,7 @@ const Dashboard = () => {
             weeklyLeaderboard={weeklyLeaderboard}
             monthlyLeaderboard={monthlyLeaderboard}
             isLoading={isLoading}
+            getReferalCount={getReferalCount}
           />
         </div>
       ) : isReferrals ? (
@@ -728,6 +730,7 @@ const Dashboard = () => {
                 weeklyLeaderboard={weeklyLeaderboard}
                 monthlyLeaderboard={monthlyLeaderboard}
                 isLoading={isLoading}
+                getReferalCount={getReferalCount}
               />
             </div>
           </div>
