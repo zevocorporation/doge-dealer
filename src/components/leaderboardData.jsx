@@ -21,48 +21,17 @@ import loader from "../assets/icons/loader.gif";
 function LeaderboardData({ title, value, variant, getReferalCount }) {
   const [data, setData] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [dataFetched, setDataFetched] = useState(false);
 
   useEffect(() => {
-    handleReferrer();
+    if (!dataFetched) handleReferrer();
   }, []);
 
   const handleReferrer = async () => {
-    if (variant === "alltime") {
-      setIsLoading(true);
-      setData(await getReferalCount(value.leader));
-      setIsLoading(false);
-    } else {
-      try {
-        setIsLoading(true);
-
-        // const {
-        //   data: { result },
-        // } = await axios.get(
-        //   `https://api.dogedealercoin.com/server_app/getReferrals/${value.leader}`
-        // );
-
-        const {
-          data: {
-            result: { DailyReferral, WeeklyReferral, MonthlyReferral },
-          },
-        } = await axios.get(
-          `http://localhost:5000/getReferrals/${value.leader}`
-        );
-        console.log(
-          value.leader,
-          DailyReferral,
-          WeeklyReferral,
-          MonthlyReferral
-        );
-        if (variant === "monthly") setData(MonthlyReferral);
-        else if (variant === "weekly") setData(WeeklyReferral);
-        else setData(DailyReferral);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        setIsLoading(false);
-      }
-    }
+    setIsLoading(true);
+    setData(await getReferalCount(value.leader));
+    setIsLoading(false);
+    setDataFetched(true);
   };
 
   return (

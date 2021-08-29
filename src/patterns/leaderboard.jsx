@@ -107,6 +107,7 @@ const Leaderboard = ({
               title={index + 1}
               value={value}
               key={index.toString()}
+              getReferalCount={getReferalCount}
             />
           );
         })
@@ -135,6 +136,7 @@ const Leaderboard = ({
               title={index + 1}
               value={value}
               key={index.toString()}
+              getReferalCount={getReferalCount}
             />
           );
         })
@@ -163,6 +165,7 @@ const Leaderboard = ({
               title={index + 1}
               value={value}
               key={index.toString()}
+              getReferalCount={getReferalCount}
             />
           );
         })
